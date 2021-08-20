@@ -17,10 +17,43 @@ namespace Emby.Plugin.M3U.Playlists.Service
   {
     #region Members
 
-    private ITargetFormatConverterSelector _formatConverterSelector;
-    private ILogger _logger;
-    private IPlaylistEnricher _playlistEnricher;
-    private IPlaylistManager _playlistManager;
+    private readonly ILogger _logger;
+    private readonly IPlaylistManager _playlistManager;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets the format converter selector.
+    /// </summary>
+    /// <value>
+    /// The format converter selector.
+    /// </value>
+    private ITargetFormatConverterSelector FormatConverterSelector => Plugin.TargetFormatConverterSelector;
+
+    /// <summary>
+    /// Gets the playlist enricher.
+    /// </summary>
+    /// <value>
+    /// The playlist enricher.
+    /// </value>
+    private IPlaylistEnricher PlaylistEnricher => Plugin.PlaylistEnricher;
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="PlaylistService" /> class.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="playlistManager">The playlist manager.</param>
+    public PlaylistService(ILogger logger, IPlaylistManager playlistManager)
+    {
+      _logger = logger;
+      _playlistManager = playlistManager;
+    }
 
     #endregion
 
@@ -46,9 +79,9 @@ namespace Emby.Plugin.M3U.Playlists.Service
         }
 
         _logger.Info($"Importing playlist with parameters: {request}");
-        var converter = _formatConverterSelector.GetConverterForPlaylistFormat(request.PlaylistFormat);
+        var converter = FormatConverterSelector.GetConverterForPlaylistFormat(request.PlaylistFormat);
         var playlist = converter.DeserializeFromFile(request.PlaylistData);
-        await _playlistEnricher.EnrichPlaylistInformation(playlist, request);
+        await PlaylistEnricher.EnrichPlaylistInformation(playlist, request);
         var creationRequest = playlist.ToCreationRequest();
         var creationResult = await _playlistManager.CreatePlaylist(creationRequest);
         _logger.Info($"Imported new playlist {creationResult.Name} (Id: {creationResult.Id})");

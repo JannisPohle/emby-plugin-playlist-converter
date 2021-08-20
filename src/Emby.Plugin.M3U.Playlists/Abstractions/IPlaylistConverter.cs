@@ -1,4 +1,5 @@
-﻿using Emby.Plugin.M3U.Playlists.Models;
+﻿using Emby.Plugin.M3U.Playlists.Definitions;
+using Emby.Plugin.M3U.Playlists.Models;
 
 namespace Emby.Plugin.M3U.Playlists.Abstractions
 {
@@ -7,6 +8,18 @@ namespace Emby.Plugin.M3U.Playlists.Abstractions
   /// </summary>
   public interface IPlaylistConverter
   {
+    #region Properties
+
+    /// <summary>
+    ///   Gets the target playlist format for this converter.
+    /// </summary>
+    /// <value>
+    ///   The target playlist format.
+    /// </value>
+    SupportedPlaylistFormats TargetPlaylistFormat { get; }
+
+    #endregion
+
     #region Methods
 
     /// <summary>

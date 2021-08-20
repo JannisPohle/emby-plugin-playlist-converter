@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Emby.Plugin.M3U.Playlists.Abstractions;
 using Emby.Plugin.M3U.Playlists.Definitions;
+using MediaBrowser.Model.Logging;
 
 namespace Emby.Plugin.M3U.Playlists.Conversion
 {
@@ -10,6 +13,33 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
   /// <seealso cref="ITargetFormatConverterSelector" />
   public class TargetFormatConverterSelector: ITargetFormatConverterSelector
   {
+    #region Members
+
+    private readonly Dictionary<SupportedPlaylistFormats, IPlaylistConverter> _availablePlaylistConverters;
+    private readonly ILogger _logger;
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="TargetFormatConverterSelector" /> class.
+    /// </summary>
+    /// <param name="availablePlaylistConverters">The available playlist converters.</param>
+    /// <param name="logger">The logger</param>
+    public TargetFormatConverterSelector(IEnumerable<IPlaylistConverter> availablePlaylistConverters, ILogger logger)
+    {
+      if (availablePlaylistConverters == null)
+      {
+        throw new ArgumentNullException(nameof(availablePlaylistConverters));
+      }
+
+      _logger = logger;
+      _availablePlaylistConverters = availablePlaylistConverters.ToDictionary(converter => converter.TargetPlaylistFormat, converter => converter);
+    }
+
+    #endregion
+
     #region Interfaces
 
     /// <inheritdoc />
@@ -20,14 +50,12 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         throw new NotSupportedException($"Given playlist format {playlistFormat} is currently not supported");
       }
 
-      switch (supportedPlaylistFormat)
+      if (!_availablePlaylistConverters.TryGetValue(supportedPlaylistFormat, out var converter))
       {
-        case SupportedPlaylistFormats.M3U:
-          //TODO use static instance from Plugin.cs
-          return new M3UPlaylistConverter();
-        default:
-          throw new NotImplementedException($"Converter for playlist format {supportedPlaylistFormat} is not yet implemented");
+        throw new NotImplementedException($"Converter for playlist format {supportedPlaylistFormat} is not yet implemented");
       }
+
+      return converter;
     }
 
     #endregion

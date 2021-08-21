@@ -1,0 +1,13 @@
+#EXTM3U
+#EXTINF:438,Blind Guardian - Imaginations From the Other Side
+#Any comment should be ignored
+Medien/Musik/Blind Guardian/Imaginations From the Other Side/01 Imaginations From the Other Side.flac
+#EXTINF:41,Blind Guardian - Inquisition, additional information after an additional comma should be ignored
+Medien/Musik/Blind Guardian/Follow the Blind/01 Inquisition.flac
+#EXTINF:307,Blind Guardian - This Will Never End
+Medien/Musik/Blind Guardian/A Twist in the Myth/1-01 This Will Never End.flac
+#EXTGRP:Group1
+#EXTINF:345,Blind Guardian - Time What Is Time:: Additional colons should also be ignored
+Medien/Musik/Blind Guardian/Somewhere Far Beyound/01 Time What Is Time.flac
+#EXTINF:361,Blind Guardian - Traveler in Time
+Medien/Musik/Blind Guardian/Tales from the Twilight World/01 Traveler in Time.flac

@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Emby.Plugin.M3U.Playlists\Emby.Plugin.M3U.Playlists.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestPlaylists\UTF8-BOM\Invalid_Empty.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Invalid_MissingHeader.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Invalid_NoEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Valid_ContainsInvalidEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Valid_MultipleEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Valid_MultipleEntries_MixedInformationState.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Valid_MultipleEntries_WithoutAdditionalInfo.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8-BOM\Valid_SingleEntry.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Invalid_Empty.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Invalid_MissingHeader.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Invalid_NoEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Valid_ContainsInvalidEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Valid_MultipleEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Valid_MultipleEntries_MixedInformationState.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Valid_MultipleEntries_WithoutAdditionalInfo.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF8\Valid_SingleEntry.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\Valid_MultipleEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

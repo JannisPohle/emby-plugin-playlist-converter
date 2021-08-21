@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Emby.Plugin.M3U.Playlists.Abstractions;
 using Emby.Plugin.M3U.Playlists.Definitions;
 using Emby.Plugin.M3U.Playlists.Models;
@@ -11,6 +15,16 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
   /// </summary>
   public class M3UPlaylistConverter: IPlaylistConverter
   {
+    #region Static
+
+    private const string TAG_HEADER = "#EXTM3U";
+    private const string TAG_INFO_LINE = "#EXTINF";
+    private const string TAG_START = "#";
+    private const char TAG_SEPARATOR = ':';
+    private const char TAG_INFO_SEPARATOR = ',';
+
+    #endregion
+
     #region Members
 
     private readonly ILogger _logger;
@@ -37,12 +51,178 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
 
     #endregion
 
+    #region Methods
+
+    private List<PlaylistItem> Parse(IEnumerable<string> lines)
+    {
+      _logger.Debug("Starting to parse file as M3U playlist...");
+      var playlistItems = new List<PlaylistItem>();
+      var firstLine = lines.FirstOrDefault();
+
+      if (firstLine == null)
+      {
+        _logger.Warn("File contains no data, can not create a new playlist");
+
+        throw new ArgumentException("File data is empty");
+      }
+
+      if (!firstLine.Trim().Equals(TAG_HEADER, StringComparison.OrdinalIgnoreCase))
+      {
+        _logger.Warn("File is missing the M3U header, can not create a new playlist");
+
+        throw new InvalidDataException("Not a valid M3U file. Missing header.");
+      }
+
+      PlaylistItem currentItem = null;
+
+      foreach (var line in lines.Skip(1).Select(line => line.Trim()))
+      {
+        if (line.StartsWith(TAG_START))
+        {
+          if (ParseInfoLine(line, out var newPlaylistItem))
+          {
+            currentItem = newPlaylistItem;
+          }
+        }
+        else
+        {
+          currentItem = ParseLocation(line, currentItem);
+
+          if (currentItem == null)
+          {
+            _logger.Debug($"Line was not recognized as a valid playlist item, skipped line: {line}");
+
+            continue;
+          }
+
+          _logger.Debug($"Parsed a new playlist item: {currentItem}");
+          playlistItems.Add(currentItem);
+          currentItem = null;
+        }
+      }
+
+      _logger.Debug($"Finished parsing file as M3U playlist, found {playlistItems.Count} items in the playlist.");
+
+      return playlistItems;
+    }
+
+    private PlaylistItem ParseLocation(string line, PlaylistItem currentItem)
+    {
+      _logger.Debug($"Trying to parse line as file location for item {currentItem?.ToString() ?? "<null>"}: '{line}'");
+
+      if (string.IsNullOrWhiteSpace(line))
+      {
+        _logger.Warn("File location is empty, skipping entry");
+
+        return null;
+      }
+
+      if (currentItem == null)
+      {
+        currentItem = new PlaylistItem();
+      }
+
+      currentItem.OriginalLocation = line;
+      _logger.Debug($"Line was parsed as file location: {currentItem}");
+
+      return currentItem;
+    }
+
+    private bool ParseInfoLine(string line, out PlaylistItem playlistItem)
+    {
+      _logger.Debug($"Trying to parse line as info line: '{line}'");
+      playlistItem = null;
+      var infoItems = line.Split(TAG_SEPARATOR);
+
+      if (!infoItems.FirstOrDefault()?.Equals(TAG_INFO_LINE, StringComparison.OrdinalIgnoreCase) ?? true)
+      {
+        _logger.Debug($"Commented line does not start with {TAG_INFO_LINE}, skipping parsing of line ('{line}')");
+
+        return false;
+      }
+
+      if (infoItems.Length < 2)
+      {
+        _logger.Warn($"Info line malformed (Does not contain two parts, split by a semicolon): '{line}'");
+
+        return false;
+      }
+
+      var infoTags = infoItems[1].Split(TAG_INFO_SEPARATOR);
+
+      if (infoTags.Length < 2)
+      {
+        _logger.Warn($"Info tag is malformed (Does not contain two parts, split by a comma): '{infoItems[1]}'");
+
+        return false;
+      }
+
+      playlistItem = new PlaylistItem
+      {
+        Title = infoTags[1].Trim()
+      };
+
+      if (!int.TryParse(infoTags[0], out var duration) || duration < 0)
+      {
+        _logger.Warn($"Info tag is malformed, duration is not valid: {infoTags[0]}");
+        _logger.Debug($"Created playlist item from info line: {playlistItem}");
+
+        return true;
+      }
+
+      playlistItem.Duration = TimeSpan.FromSeconds(duration);
+      _logger.Debug($"Created playlist item from info line: {playlistItem}");
+
+      return true;
+    }
+
+    #endregion
+
     #region Interfaces
 
     /// <inheritdoc />
     public Playlist DeserializeFromFile(byte[] rawFileContent)
     {
-      throw new NotImplementedException();
+      if (rawFileContent == null)
+      {
+        _logger.Warn("File does not contain any data, skip parsing the file");
+
+        throw new ArgumentNullException(nameof(rawFileContent), "File data is empty");
+      }
+
+      //TODO find library that parses from correct encoding and removes BOM
+      var fileContent = Encoding.UTF8.GetString(rawFileContent);
+
+      if (fileContent.StartsWith(Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble())))
+      {
+        fileContent = fileContent.Remove(0, 1);
+      }
+
+      if (string.IsNullOrWhiteSpace(fileContent))
+      {
+        _logger.Warn("File does not contain any data, skip parsing the file");
+
+        throw new ArgumentException("File data is empty", nameof(rawFileContent));
+      }
+
+      var lines = fileContent.Split(new[] { "\n", "\r\n" }, StringSplitOptions.None);
+      _logger.Debug($"Found {lines.Length} lines in the file data");
+      var playlistItems = Parse(lines.Select(line => line.Trim()));
+
+      if (!playlistItems.Any())
+      {
+        _logger.Warn("Found no playlist items in the file data. No playlist is created.");
+
+        throw new InvalidDataException("File data contained no playlist entries");
+      }
+
+      var playlist = new Playlist
+      {
+        PlaylistItems = playlistItems
+      };
+      _logger.Info($"Finished parsing the file data, created a new playlist with {playlistItems.Count} entries.");
+
+      return playlist;
     }
 
     /// <inheritdoc />

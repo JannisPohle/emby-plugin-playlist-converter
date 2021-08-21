@@ -45,16 +45,21 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// <inheritdoc />
     public IPlaylistConverter GetConverterForPlaylistFormat(string playlistFormat)
     {
+      _logger.Debug($"Trying to find converter for playlist format {playlistFormat}...");
+
       if (!Enum.TryParse<SupportedPlaylistFormats>(playlistFormat, out var supportedPlaylistFormat))
       {
+        _logger.Warn($"Given playlist format {playlistFormat} is not a supported playlist format.");
         throw new NotSupportedException($"Given playlist format {playlistFormat} is currently not supported");
       }
 
       if (!_availablePlaylistConverters.TryGetValue(supportedPlaylistFormat, out var converter))
       {
+        _logger.Warn($"Playlist format {supportedPlaylistFormat} is not yet implemented");
         throw new NotImplementedException($"Converter for playlist format {supportedPlaylistFormat} is not yet implemented");
       }
 
+      _logger.Debug($"Found a playlist converter for playlist format {supportedPlaylistFormat}");
       return converter;
     }
 

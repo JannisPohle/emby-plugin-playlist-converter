@@ -13,6 +13,7 @@ namespace Emby.Plugin.M3U.Playlists.Service
   /// </summary>
   /// <seealso cref="IService" />
   //TODO use ResultFactory
+  //TODO extract methods into separate file
   public class PlaylistService: IService
   {
     #region Members
@@ -81,7 +82,7 @@ namespace Emby.Plugin.M3U.Playlists.Service
         _logger.Info($"Importing playlist with parameters: {request}");
         var converter = FormatConverterSelector.GetConverterForPlaylistFormat(request.PlaylistFormat);
         var playlist = converter.DeserializeFromFile(request.PlaylistData);
-        await PlaylistEnricher.EnrichPlaylistInformation(playlist, request);
+        PlaylistEnricher.EnrichPlaylistInformation(playlist, request);
         var creationRequest = playlist.ToCreationRequest();
         var creationResult = await _playlistManager.CreatePlaylist(creationRequest);
         _logger.Info($"Imported new playlist {creationResult.Name} (Id: {creationResult.Id})");

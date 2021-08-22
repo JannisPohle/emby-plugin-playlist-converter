@@ -1,4 +1,5 @@
 ﻿using Emby.Plugin.M3U.Playlists.Models;
+using MediaBrowser.Model.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Emby.Plugin.M3U.Playlists.UnitTests
@@ -63,6 +64,23 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       {
         Assert.IsNull(actual.Title, $"Expected title to be null, actual value: {actual.Title}");
       }
+    }
+
+    /// <summary>
+    /// Asserts that the playlist is equal to the given values.
+    /// </summary>
+    /// <param name="assert">The assert.</param>
+    /// <param name="actualPlaylist">The actual playlist.</param>
+    /// <param name="expectedName">The expected name.</param>
+    /// <param name="expectedUserId">The expected user identifier.</param>
+    /// <param name="expectedMediaType">Expected type of the media.</param>
+    /// <param name="expectedPlaylistItemCount">The expected playlist item count.</param>
+    public static void PlaylistsAreEqual(this Assert assert, Playlist actualPlaylist, string expectedName = PlaylistTestHelper.PLAYLIST_NAME_1, string expectedUserId = PlaylistTestHelper.USER_ID_1, string expectedMediaType = MediaType.Audio, int expectedPlaylistItemCount = 0)
+    {
+      Assert.AreEqual(expectedMediaType, actualPlaylist.MediaType);
+      Assert.AreEqual(expectedName, actualPlaylist.Name);
+      Assert.AreEqual(expectedUserId, actualPlaylist.UserId);
+      Assert.AreEqual(expectedPlaylistItemCount, actualPlaylist.PlaylistItems.Count);
     }
 
     #endregion

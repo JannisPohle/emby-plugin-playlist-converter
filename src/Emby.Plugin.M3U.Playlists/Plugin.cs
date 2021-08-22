@@ -6,6 +6,7 @@ using Emby.Plugin.M3U.Playlists.Conversion;
 using Emby.Plugin.M3U.Playlists.Definitions;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
+using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
@@ -21,6 +22,7 @@ namespace Emby.Plugin.M3U.Playlists
     #region Members
 
     private readonly ILogger _logger;
+    private readonly ILibraryManager _libraryManager;
 
     #endregion
 
@@ -52,9 +54,11 @@ namespace Emby.Plugin.M3U.Playlists
     /// <param name="applicationPaths">The application paths.</param>
     /// <param name="xmlSerializer">The XML serializer.</param>
     /// <param name="logger">The logger</param>
-    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogger logger): base(applicationPaths, xmlSerializer)
+    /// <param name="libraryManager">The library manager</param>
+    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogger logger, ILibraryManager libraryManager): base(applicationPaths, xmlSerializer)
     {
       _logger = logger;
+      _libraryManager = libraryManager;
       Initialize();
     }
 
@@ -64,7 +68,7 @@ namespace Emby.Plugin.M3U.Playlists
 
     private void Initialize()
     {
-      PlaylistEnricher = new PlaylistEnricher(_logger);
+      PlaylistEnricher = new PlaylistEnricher(_logger, _libraryManager);
 
       var availableTargetFormatConverters = new List<IPlaylistConverter>
       {

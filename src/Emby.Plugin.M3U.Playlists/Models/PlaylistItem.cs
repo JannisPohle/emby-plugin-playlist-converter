@@ -42,12 +42,12 @@ namespace Emby.Plugin.M3U.Playlists.Models
     public string OriginalLocation { get; set; }
 
     /// <summary>
-    /// Gets or sets the location of the target playlist (e.g. the path in the emby system, when importing a playlist).
+    /// Gets or sets the internal identifier.
     /// </summary>
     /// <value>
-    /// The target format.
+    /// The internal identifier.
     /// </value>
-    public string TargetLocation { get; set; }
+    public Guid? InternalId { get; set; }
 
     #endregion
 

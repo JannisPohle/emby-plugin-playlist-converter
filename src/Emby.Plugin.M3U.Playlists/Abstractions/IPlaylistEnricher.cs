@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Emby.Plugin.M3U.Playlists.Models;
+﻿using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
 
 namespace Emby.Plugin.M3U.Playlists.Abstractions
@@ -17,7 +16,7 @@ namespace Emby.Plugin.M3U.Playlists.Abstractions
     /// <param name="playlist">The playlist.</param>
     /// <param name="request">The playlist creation request.</param>
     /// <returns></returns>
-    Task EnrichPlaylistInformation(Playlist playlist, ImportPlaylist request);
+    void EnrichPlaylistInformation(Playlist playlist, ImportPlaylist request);
 
     #endregion
   }

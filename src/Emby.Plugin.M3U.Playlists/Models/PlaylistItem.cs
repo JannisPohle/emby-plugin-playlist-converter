@@ -58,8 +58,7 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <inheritdoc />
     public override string ToString()
     {
-      //TODO implement
-      return base.ToString();
+      return $"{nameof(Title)}: {Title}; {nameof(OriginalLocation)}: {OriginalLocation}; {nameof(Duration)}: {Duration}; {nameof(Found)}: {Found}";
     }
 
     #endregion

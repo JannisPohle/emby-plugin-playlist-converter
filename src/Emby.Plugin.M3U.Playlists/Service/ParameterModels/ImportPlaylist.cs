@@ -1,6 +1,7 @@
 ﻿using System;
 using Emby.Plugin.M3U.Playlists.Abstractions;
 using Emby.Plugin.M3U.Playlists.Models;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Model.Services;
 
 namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
@@ -72,8 +73,7 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     /// <inheritdoc />
     public override string ToString()
     {
-      //TODO implement
-      return base.ToString();
+      return $"{nameof(PlaylistName)}: {PlaylistName}; {nameof(PlaylistFormat)}: {PlaylistFormat}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}";
     }
 
     #endregion

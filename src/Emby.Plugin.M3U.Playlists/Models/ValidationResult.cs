@@ -24,8 +24,7 @@
     /// <inheritdoc />
     public override string ToString()
     {
-      //TODO implement
-      return base.ToString();
+      return $"Validation {(Success ? "succeeded" : "failed")}";
     }
 
     #endregion

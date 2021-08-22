@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Playlists;
 
 namespace Emby.Plugin.M3U.Playlists.Models
@@ -61,8 +62,7 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <inheritdoc />
     public override string ToString()
     {
-      //TODO implement
-      return base.ToString();
+      return $"{nameof(Name)}: {Name}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}; {nameof(PlaylistItems)} (count): {PlaylistItems?.Count}";
     }
 
     #endregion

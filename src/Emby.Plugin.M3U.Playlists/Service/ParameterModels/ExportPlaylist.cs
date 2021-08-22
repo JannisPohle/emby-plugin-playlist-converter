@@ -57,7 +57,23 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     /// <inheritdoc />
     public ValidationResult Validate()
     {
-      throw new NotImplementedException();
+      var validationResult = new ValidationResult() { Success = true };
+
+      if (UserId == default)
+      {
+        var validationMessage = new ValidationResultItem("UserId is not set", nameof(UserId),
+                                                         ValidationResultItem.Severity.Warning);
+        validationResult.ValidationMessages.Add(validationMessage);
+      }
+
+      if (Id == default)
+      {
+        var validationMessage = new ValidationResultItem("Playlist ID must be set when exporting a playlist", nameof(Id));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+
+      return validationResult;
     }
 
     #endregion

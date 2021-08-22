@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Emby.Plugin.M3U.Playlists.Abstractions;
+using Emby.Plugin.M3U.Playlists.Definitions;
 using Emby.Plugin.M3U.Playlists.Models;
-using MediaBrowser.Controller.Entities;
 using MediaBrowser.Model.Services;
 
 namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
@@ -73,7 +74,8 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     /// <inheritdoc />
     public override string ToString()
     {
-      return $"{nameof(PlaylistName)}: {PlaylistName}; {nameof(PlaylistFormat)}: {PlaylistFormat}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}";
+      return
+        $"{nameof(PlaylistName)}: {PlaylistName}; {nameof(PlaylistFormat)}: {PlaylistFormat}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}";
     }
 
     #endregion
@@ -87,7 +89,55 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     /// <inheritdoc />
     public ValidationResult Validate()
     {
-      throw new NotImplementedException();
+      var validationResult = new ValidationResult { Success = true };
+
+      if (PlaylistData == null || !PlaylistData.Any())
+      {
+        var validationMessage = new ValidationResultItem("Playlist data must be set for importing a playlist", nameof(PlaylistData));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+
+      if (string.IsNullOrWhiteSpace(MediaType))
+      {
+        var validationMessage = new ValidationResultItem("Media type must be set for importing a playlist", nameof(MediaType));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+      else if (MediaType != MediaBrowser.Model.Entities.MediaType.Audio && MediaType != MediaBrowser.Model.Entities.MediaType.Video)
+      {
+        var validationMessage = new ValidationResultItem($"Media type {MediaType} is not supported for importing a playlist", nameof(MediaType));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+
+      if (string.IsNullOrWhiteSpace(PlaylistFormat))
+      {
+        var validationMessage = new ValidationResultItem("Playlist format must be set for importing a playlist", nameof(PlaylistFormat));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+      else if (!Enum.TryParse(PlaylistFormat, true, out SupportedPlaylistFormats _))
+      {
+        var validationMessage =
+          new ValidationResultItem($"Playlist format {PlaylistFormat} is not supported for importing a playlist", nameof(PlaylistFormat));
+        validationResult.ValidationMessages.Add(validationMessage);
+        validationResult.Success = false;
+      }
+
+      if (UserId == default)
+      {
+        var validationMessage = new ValidationResultItem("UserId is not set", nameof(UserId), ValidationResultItem.Severity.Warning);
+        validationResult.ValidationMessages.Add(validationMessage);
+      }
+
+      if (string.IsNullOrWhiteSpace(PlaylistName))
+      {
+        var validationMessage = new ValidationResultItem("Playlist name is not set", nameof(PlaylistName), ValidationResultItem.Severity.Warning);
+        validationResult.ValidationMessages.Add(validationMessage);
+      }
+
+      return validationResult;
     }
 
     #endregion

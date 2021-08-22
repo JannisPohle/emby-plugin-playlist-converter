@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MediaBrowser.Model.MediaInfo;
 using MediaBrowser.Model.Playlists;
 
 namespace Emby.Plugin.M3U.Playlists.Models
@@ -46,6 +45,18 @@ namespace Emby.Plugin.M3U.Playlists.Models
 
     #endregion
 
+    #region Constructors
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="Playlist" /> class.
+    /// </summary>
+    public Playlist()
+    {
+      PlaylistItems = new List<PlaylistItem>();
+    }
+
+    #endregion
+
     #region Methods
 
     /// <summary>
@@ -62,7 +73,8 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <inheritdoc />
     public override string ToString()
     {
-      return $"{nameof(Name)}: {Name}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}; {nameof(PlaylistItems)} (count): {PlaylistItems?.Count}";
+      return
+        $"{nameof(Name)}: {Name}; {nameof(MediaType)}: {MediaType}; {nameof(UserId)}: {UserId}; {nameof(PlaylistItems)} (count): {PlaylistItems?.Count}";
     }
 
     #endregion

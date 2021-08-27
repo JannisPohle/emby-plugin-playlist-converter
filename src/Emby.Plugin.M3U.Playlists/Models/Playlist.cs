@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MediaBrowser.Model.Playlists;
+﻿using System.Collections.Generic;
 
 namespace Emby.Plugin.M3U.Playlists.Models
 {
@@ -58,15 +56,6 @@ namespace Emby.Plugin.M3U.Playlists.Models
     #endregion
 
     #region Methods
-
-    /// <summary>
-    ///   Converts the internal playlist to a creation request.
-    /// </summary>
-    /// <returns></returns>
-    public PlaylistCreationRequest ToCreationRequest()
-    {
-      throw new NotImplementedException();
-    }
 
     #region Overrides of Object
 

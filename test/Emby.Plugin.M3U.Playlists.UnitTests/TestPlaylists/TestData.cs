@@ -77,5 +77,31 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
         OriginalLocation = "Medien/Musik/Blind Guardian/Beyond the Red Mirror/01 The Ninth Wave.flac",
         Title = "Blind Guardian - The Ninth Wave"
       };
+
+    /// <summary>
+    /// Adds the internal identifier to the playlist item.
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="internalId">The internal identifier.</param>
+    /// <returns></returns>
+    public static PlaylistItem AddInternalId(this PlaylistItem playlistItem, string internalId = null)
+    {
+      playlistItem.InternalId = new Guid(internalId ?? Guid.NewGuid().ToString());
+
+      return playlistItem;
+    }
+
+    /// <summary>
+    /// Sets found to the given value on the playlist item
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="found">Found property of the playlist item is set to this value</param>
+    /// <returns></returns>
+    public static PlaylistItem SetFound(this PlaylistItem playlistItem, bool found = true)
+    {
+      playlistItem.Found = found;
+
+      return playlistItem;
+    }
   }
 }

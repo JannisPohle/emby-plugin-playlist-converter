@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Emby.Plugin.M3U.Playlists.Abstractions;
 using Emby.Plugin.M3U.Playlists.Configuration;
 using Emby.Plugin.M3U.Playlists.Conversion;
@@ -7,6 +8,7 @@ using Emby.Plugin.M3U.Playlists.Definitions;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Controller.Library;
+using MediaBrowser.Controller.Playlists;
 using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
@@ -23,26 +25,19 @@ namespace Emby.Plugin.M3U.Playlists
 
     private readonly ILogger _logger;
     private readonly ILibraryManager _libraryManager;
+    private readonly IPlaylistManager _playlistManager;
 
     #endregion
 
     #region Properties
 
     /// <summary>
-    ///   Gets the playlist enricher.
+    /// Gets the playlist business logic.
     /// </summary>
     /// <value>
-    ///   The playlist enricher.
+    /// The playlist business logic.
     /// </value>
-    public static IPlaylistEnricher PlaylistEnricher { get; private set; }
-
-    /// <summary>
-    ///   Gets the target format converter selector.
-    /// </summary>
-    /// <value>
-    ///   The target format converter selector.
-    /// </value>
-    public static ITargetFormatConverterSelector TargetFormatConverterSelector { get; private set; }
+    public static IPlaylistBusinessLogic PlaylistBusinessLogic { get; private set; }
 
     #endregion
 
@@ -55,10 +50,12 @@ namespace Emby.Plugin.M3U.Playlists
     /// <param name="xmlSerializer">The XML serializer.</param>
     /// <param name="logger">The logger</param>
     /// <param name="libraryManager">The library manager</param>
-    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogger logger, ILibraryManager libraryManager): base(applicationPaths, xmlSerializer)
+    /// <param name="playlistManager">The playlist manager</param>
+    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogger logger, ILibraryManager libraryManager, IPlaylistManager playlistManager): base(applicationPaths, xmlSerializer)
     {
       _logger = logger;
       _libraryManager = libraryManager;
+      _playlistManager = playlistManager;
       Initialize();
     }
 
@@ -68,13 +65,15 @@ namespace Emby.Plugin.M3U.Playlists
 
     private void Initialize()
     {
-      PlaylistEnricher = new PlaylistEnricher(_logger, _libraryManager);
+      var playlistEnricher = new PlaylistEnricher(_logger, _libraryManager);
 
       var availableTargetFormatConverters = new List<IPlaylistConverter>
       {
         new M3UPlaylistConverter(_logger)
       };
-      TargetFormatConverterSelector = new TargetFormatConverterSelector(availableTargetFormatConverters, _logger);
+      var targetFormatConverterSelector = new TargetFormatConverterSelector(availableTargetFormatConverters, _logger);
+
+      PlaylistBusinessLogic = new PlaylistBusinessLogic(targetFormatConverterSelector, _libraryManager, _logger, playlistEnricher, _playlistManager);
     }
 
     #endregion
@@ -87,7 +86,7 @@ namespace Emby.Plugin.M3U.Playlists
     public IEnumerable<PluginPageInfo> GetPages()
     {
       //TODO
-      throw new NotImplementedException();
+      return Enumerable.Empty<PluginPageInfo>();
     }
 
     #endregion

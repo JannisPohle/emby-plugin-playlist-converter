@@ -127,7 +127,7 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
 
       if (UserId == default)
       {
-        var validationMessage = new ValidationResultItem("UserId is not set", nameof(UserId), ValidationResultItem.Severity.Warning);
+        var validationMessage = new ValidationResultItem("UserId is must be set to import a playlist", nameof(UserId), ValidationResultItem.Severity.Error);
         validationResult.ValidationMessages.Add(validationMessage);
       }
 

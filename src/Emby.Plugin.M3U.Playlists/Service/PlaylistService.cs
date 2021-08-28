@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Emby.Plugin.M3U.Playlists.Abstractions;
+using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
 using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Services;
@@ -50,13 +51,17 @@ namespace Emby.Plugin.M3U.Playlists.Service
     {
       try
       {
-        return BusinessLogic.ImportPlaylist(request);
+        return await BusinessLogic.ImportPlaylist(request);
       }
       catch (Exception ex)
       {
         _logger.ErrorException($"Failed to import playlist with parameters: {request}", ex);
 
-        return false;
+        return new PlaylistImportResult()
+        {
+          Success = false,
+          Message = $"Failed to import the playlist: {ex.Message}"
+        };
       }
     }
 

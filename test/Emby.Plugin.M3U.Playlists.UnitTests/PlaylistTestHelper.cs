@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Emby.Plugin.M3U.Playlists.Definitions;
 using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
 using MediaBrowser.Controller.Entities;
@@ -30,21 +31,27 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     #region Methods
 
     /// <summary>
-    ///   Creates a valid import playlist with the given values.
+    /// Creates a valid import playlist with the given values.
     /// </summary>
     /// <param name="userId">The user identifier.</param>
     /// <param name="mediaType">Type of the media.</param>
     /// <param name="playlistName">Name of the playlist.</param>
+    /// <param name="playlistFormat">The playlist format.</param>
+    /// <param name="playlistData">The playlist data.</param>
     /// <returns></returns>
     public static ImportPlaylist CreateImportPlaylist(string userId = USER_ID_1,
                                                       string mediaType = MediaType.Audio,
-                                                      string playlistName = PLAYLIST_NAME_1)
+                                                      string playlistName = PLAYLIST_NAME_1,
+                                                      SupportedPlaylistFormats? playlistFormat = SupportedPlaylistFormats.M3U,
+                                                      byte[] playlistData = null)
     {
       var importPlaylist = new ImportPlaylist
       {
         UserId = Guid.Parse(userId),
         MediaType = mediaType,
-        PlaylistName = playlistName
+        PlaylistName = playlistName,
+        PlaylistFormat = playlistFormat?.ToString(),
+        PlaylistData = playlistData
       };
 
       return importPlaylist;
@@ -60,6 +67,61 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       {
         PlaylistItems = new List<PlaylistItem>()
       };
+    }
+
+    /// <summary>
+    /// Creates the default playlist with the given values.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="mediaType">Type of the media.</param>
+    /// <param name="userId">The user identifier.</param>
+    /// <returns></returns>
+    public static Playlist CreateDefaultPlaylist(string name = PLAYLIST_NAME_1, string mediaType = MediaType.Audio, string userId = USER_ID_1)
+    {
+      return CreateEmptyPlaylist()
+             .AddName(name)
+             .AddMediaType(mediaType)
+             .AddUserId(userId);
+    }
+
+    /// <summary>
+    /// Adds a name to the playlist and returns the playlist.
+    /// </summary>
+    /// <param name="playlist">The playlist.</param>
+    /// <param name="name">The name.</param>
+    /// <returns></returns>
+    public static Playlist AddName(this Playlist playlist, string name = PLAYLIST_NAME_1)
+    {
+      playlist.Name = name;
+
+      return playlist;
+    }
+
+
+    /// <summary>
+    /// Adds the media type to the playlist and returns the playlist.
+    /// </summary>
+    /// <param name="playlist">The playlist.</param>
+    /// <param name="mediaType">Type of the media.</param>
+    /// <returns></returns>
+    public static Playlist AddMediaType(this Playlist playlist, string mediaType = MediaType.Audio)
+    {
+      playlist.MediaType = mediaType;
+
+      return playlist;
+    }
+
+    /// <summary>
+    /// Adds the user identifier to the playlist and returns the playlist.
+    /// </summary>
+    /// <param name="playlist">The playlist.</param>
+    /// <param name="userId">The user identifier.</param>
+    /// <returns></returns>
+    public static Playlist AddUserId(this Playlist playlist, string userId = USER_ID_1)
+    {
+      playlist.UserId = userId;
+
+      return playlist;
     }
 
     /// <summary>

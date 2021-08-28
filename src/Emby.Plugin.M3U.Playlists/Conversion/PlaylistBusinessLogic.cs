@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Emby.Plugin.M3U.Playlists.Abstractions;
+using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.Playlists;
@@ -104,16 +105,20 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// </summary>
     /// <param name="request">The request.</param>
     /// <returns></returns>
-    public async Task<bool> ImportPlaylist(ImportPlaylist request)
+    public async Task<PlaylistImportResult> ImportPlaylist(ImportPlaylist request)
     {
+      var result = new PlaylistImportResult();
       _logger.Debug("Starting to import a new playlist...");
       var validationResult = request.Validate();
 
       if (!validationResult.Success)
       {
-        _logger.Warn($"Validation of parameters for importing a new playlist failed: {validationResult}");
+        var message = $"Validation of parameters for importing a new playlist failed: {validationResult}";
+        _logger.Warn(message);
 
-        return false;
+        result.Success = false;
+        result.Message = message;
+        return result;
       }
 
       _logger.Info($"Importing playlist with parameters: {request}");
@@ -124,7 +129,11 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       var creationResult = await _playlistManager.CreatePlaylist(creationRequest);
       _logger.Info($"Imported new playlist {creationResult.Name} (Id: {creationResult.Id})");
 
-      return true;
+
+      result.Success = true;
+      result.Name = creationResult.Name;
+      result.PlaylistId = creationResult.Id;
+      return result;
     }
 
     #endregion

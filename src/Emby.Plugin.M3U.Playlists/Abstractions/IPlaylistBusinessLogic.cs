@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
 
 namespace Emby.Plugin.M3U.Playlists.Abstractions
@@ -15,7 +16,7 @@ namespace Emby.Plugin.M3U.Playlists.Abstractions
     /// </summary>
     /// <param name="request">The request.</param>
     /// <returns></returns>
-    Task<bool> ImportPlaylist(ImportPlaylist request);
+    Task<PlaylistImportResult> ImportPlaylist(ImportPlaylist request);
 
     #endregion
   }

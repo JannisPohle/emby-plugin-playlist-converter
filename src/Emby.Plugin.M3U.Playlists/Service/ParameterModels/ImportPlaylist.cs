@@ -11,8 +11,8 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
   ///   Represents a request to import a playlist
   /// </summary>
   /// <seealso cref="bool" />
-  [Route("/playlist", "POST")]
-  public class ImportPlaylist: IReturn<bool>, IValidatingModel
+  [Route("/plugin/playlist", "POST")]
+  public class ImportPlaylist: IReturn<PlaylistImportResult>, IValidatingModel
   {
     #region Properties
 
@@ -22,7 +22,7 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     /// <value>
     ///   The playlist data.
     /// </value>
-    [ApiMember(Name = nameof(PlaylistData), Description = "The raw playlist data from an M3U file", IsRequired = true, DataType = "byte[]",
+    [ApiMember(Name = nameof(PlaylistData), Description = "The raw playlist data from an M3U file, encoded as ", IsRequired = true, DataType = "byte[]",
                ParameterType = "body", Verb = "POST")]
     public byte[] PlaylistData { get; set; }
 
@@ -43,7 +43,7 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
     ///   The user identifier.
     /// </value>
     [ApiMember(Name = nameof(UserId), Description = "The user id", IsRequired = true, DataType = "string", ParameterType = "path", Verb = "POST")]
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     /// <summary>
     ///   Gets or sets the type of the media.
@@ -125,9 +125,9 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
         validationResult.Success = false;
       }
 
-      if (UserId == default)
+      if (UserId == null)
       {
-        var validationMessage = new ValidationResultItem("UserId is must be set to import a playlist", nameof(UserId), ValidationResultItem.Severity.Error);
+        var validationMessage = new ValidationResultItem("UserId is not set playlist", nameof(UserId), ValidationResultItem.Severity.Warning);
         validationResult.ValidationMessages.Add(validationMessage);
       }
 

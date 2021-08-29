@@ -98,7 +98,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     }
 
     [TestMethod]
-    public void ImportPlaylist_MissingUserId_Invalid_OK()
+    public void ImportPlaylist_MissingUserId_Valid_OK()
     {
       var importPlaylist = new ImportPlaylist
       {
@@ -113,7 +113,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(validationResult.ValidationMessages);
       Assert.AreEqual(1, validationResult.ValidationMessages.Count);
       var validationMessage = validationResult.ValidationMessages.Single();
-      Assert.AreEqual(ValidationResultItem.Severity.Error, validationMessage.ValidationSeverity);
+      Assert.AreEqual(ValidationResultItem.Severity.Warning, validationMessage.ValidationSeverity);
       Assert.AreEqual(nameof(ImportPlaylist.UserId), validationMessage.PropertyName);
       Assert.IsFalse(string.IsNullOrWhiteSpace(validationMessage.Message));
     }

@@ -48,6 +48,9 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// <returns></returns>
     private BaseItem FindMatchingMediaItem(PlaylistItem playlistItem, string requestMediaType)
     {
+      //TODO try with file name
+      //TODO try without media type
+      //TODO try to split the name into band and song parts
       var searchTerm = GetSearchTerm(playlistItem);
       var mediaTypes = new[] { requestMediaType };
 
@@ -133,9 +136,9 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
           continue;
         }
 
-        _logger.Debug($"Found a matching media item for imported playlist item {playlistItem}: {matchingItem} (Id: {matchingItem.Id})");
         playlistItem.Found = true;
         playlistItem.InternalId = matchingItem.Id;
+        _logger.Debug($"Found a matching media item for imported playlist item {playlistItem}: {matchingItem} (Id: {matchingItem.Id})");
       }
 
       _logger.Info($"Found matching media items for {playlist.PlaylistItems.Count(pi => pi.Found)} items in the imported playlist out of {playlist.PlaylistItems.Count} total imported playlist items");

@@ -48,12 +48,12 @@ namespace Emby.Plugin.M3U.Playlists
     /// </summary>
     /// <param name="applicationPaths">The application paths.</param>
     /// <param name="xmlSerializer">The XML serializer.</param>
-    /// <param name="logger">The logger</param>
+    /// <param name="logManager">The logManager</param>
     /// <param name="libraryManager">The library manager</param>
     /// <param name="playlistManager">The playlist manager</param>
-    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogger logger, ILibraryManager libraryManager, IPlaylistManager playlistManager): base(applicationPaths, xmlSerializer)
+    public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, ILogManager logManager, ILibraryManager libraryManager, IPlaylistManager playlistManager): base(applicationPaths, xmlSerializer)
     {
-      _logger = logger;
+      _logger = logManager.GetLogger(Name);
       _libraryManager = libraryManager;
       _playlistManager = playlistManager;
       Initialize();
@@ -85,8 +85,14 @@ namespace Emby.Plugin.M3U.Playlists
     /// <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages()
     {
-      //TODO
-      return Enumerable.Empty<PluginPageInfo>();
+      var importPage = new PluginPageInfo()
+      {
+        Name = "import",
+        DisplayName = "Import Playlist",
+        EnableInMainMenu = true,
+        EmbeddedResourcePath = $"{GetType().Namespace}.Pages.import.html"
+      };
+      return new[] { importPage };
     }
 
     #endregion
@@ -101,7 +107,7 @@ namespace Emby.Plugin.M3U.Playlists
     /// <value>
     ///   The name.
     /// </value>
-    public override string Name => Constants.PLUGIN_NAME;
+    public sealed override string Name => Constants.PLUGIN_NAME;
 
     /// <summary>
     ///   Gets the identifier.
@@ -109,7 +115,7 @@ namespace Emby.Plugin.M3U.Playlists
     /// <value>
     ///   The identifier.
     /// </value>
-    public override Guid Id => Constants.PluginId;
+    public sealed override Guid Id => Constants.PluginId;
 
     #endregion
   }

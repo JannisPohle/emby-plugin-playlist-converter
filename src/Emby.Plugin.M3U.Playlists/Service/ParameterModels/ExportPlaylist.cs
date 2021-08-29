@@ -10,7 +10,7 @@ namespace Emby.Plugin.M3U.Playlists.Service.ParameterModels
   ///   Represents a request to export a playlist
   /// </summary>
   /// <seealso cref="byte" />
-  [Route("/playlist/{Id}", "GET")]
+  [Route("/plugin/playlist/{Id}", "GET")]
   public class ExportPlaylist: IReturn<byte[]>, IValidatingModel
   {
     #region Properties

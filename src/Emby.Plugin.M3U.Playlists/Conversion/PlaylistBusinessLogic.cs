@@ -71,11 +71,6 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         throw new ArgumentException("Media type must be set when converting to a playlist creation request");
       }
 
-      if (string.IsNullOrWhiteSpace(playlist.UserId))
-      {
-        throw new ArgumentException("User id must be set when converting to a playlist creation request");
-      }
-
       if (string.IsNullOrWhiteSpace(playlist.Name))
       {
         _logger.Info("Name for playlist is empty, generating a default name...");
@@ -119,6 +114,12 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         result.Success = false;
         result.Message = message;
         return result;
+      }
+
+      if (validationResult.ValidationMessages.Any())
+      {
+        var message = $"Validation of parameters for importing a new playlist succeded: {validationResult}";
+        _logger.Info(message);
       }
 
       _logger.Info($"Importing playlist with parameters: {request}");

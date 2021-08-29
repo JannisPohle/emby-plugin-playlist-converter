@@ -159,29 +159,6 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
-    public void ToCreationRequest_UserIdMissing_NOK()
-    {
-      var ids = new List<Guid>
-      {
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid(),
-        Guid.NewGuid()
-      };
-      var playlist = PlaylistTestHelper.CreateEmptyPlaylist()
-                                       .AddMediaType()
-                                       .AddName();
-      playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide.AddInternalId(ids[0].ToString()).SetFound());
-      playlist.PlaylistItems.Add(TestData.Inquisition.AddInternalId(ids[1].ToString()).SetFound());
-      playlist.PlaylistItems.Add(TestData.Majesty.AddInternalId(ids[2].ToString()).SetFound());
-      playlist.PlaylistItems.Add(TestData.NinthWave.AddInternalId(ids[3].ToString()).SetFound());
-      playlist.PlaylistItems.Add(TestData.PreciousJerusalem.AddInternalId(ids[4].ToString()).SetFound());
-      _businessLogic.ToCreationRequest(playlist);
-    }
-
-    [TestMethod]
     public async Task ImportPlaylist_OK()
     {
       _playlistConverterMock.Setup(mock => mock.DeserializeFromFile(It.IsAny<byte[]>())).Returns(PlaylistTestHelper.CreateDefaultPlaylist());

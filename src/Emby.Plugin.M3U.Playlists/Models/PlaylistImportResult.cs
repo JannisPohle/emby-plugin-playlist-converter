@@ -1,9 +1,11 @@
-﻿namespace Emby.Plugin.M3U.Playlists.Models
+﻿using Emby.Plugin.M3U.Playlists.Abstractions;
+
+namespace Emby.Plugin.M3U.Playlists.Models
 {
   /// <summary>
   ///   Represents the result of the playlist import
   /// </summary>
-  public class PlaylistImportResult
+  public class PlaylistImportResult: IOperationResult
   {
     #region Properties
 

@@ -12,7 +12,6 @@ namespace Emby.Plugin.M3U.Playlists.Service
   ///   The service that exposes a Restful api for managing M3U playlists
   /// </summary>
   /// <seealso cref="IService" />
-  //TODO use ResultFactory
   public class PlaylistService: IService
   {
     #region Members

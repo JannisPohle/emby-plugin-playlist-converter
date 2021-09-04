@@ -47,7 +47,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     {
       _logger.Debug($"Trying to find converter for playlist format {playlistFormat}...");
 
-      if (!Enum.TryParse<SupportedPlaylistFormats>(playlistFormat, out var supportedPlaylistFormat))
+      if (!Enum.TryParse<SupportedPlaylistFormats>(playlistFormat, true, out var supportedPlaylistFormat))
       {
         _logger.Warn($"Given playlist format {playlistFormat} is not a supported playlist format.");
         throw new NotSupportedException($"Given playlist format {playlistFormat} is currently not supported");

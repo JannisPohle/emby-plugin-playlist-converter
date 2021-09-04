@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Emby.Plugin.M3U.Playlists.Abstractions;
 using Emby.Plugin.M3U.Playlists.Models;
 using Emby.Plugin.M3U.Playlists.Service.ParameterModels;
-using MediaBrowser.Controller.Library;
 using MediaBrowser.Controller.Playlists;
 using MediaBrowser.Model.Logging;
 using MediaBrowser.Model.Playlists;
@@ -24,7 +23,6 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     #region Members
 
     private readonly ITargetFormatConverterSelector _formatConverterSelector;
-    private readonly ILibraryManager _libraryManager;
     private readonly ILogger _logger;
     private readonly IPlaylistEnricher _playlistEnricher;
     private readonly IPlaylistManager _playlistManager;
@@ -37,18 +35,15 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     ///   Initializes a new instance of the <see cref="PlaylistBusinessLogic" /> class.
     /// </summary>
     /// <param name="formatConverterSelector">The format converter selector.</param>
-    /// <param name="libraryManager">The library manager.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="playlistEnricher">The playlist enricher.</param>
     /// <param name="playlistManager">The playlist manager.</param>
     public PlaylistBusinessLogic(ITargetFormatConverterSelector formatConverterSelector,
-                                 ILibraryManager libraryManager,
                                  ILogger logger,
                                  IPlaylistEnricher playlistEnricher,
                                  IPlaylistManager playlistManager)
     {
       _formatConverterSelector = formatConverterSelector;
-      _libraryManager = libraryManager;
       _logger = logger;
       _playlistEnricher = playlistEnricher;
       _playlistManager = playlistManager;
@@ -76,14 +71,14 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         _logger.Info("Name for playlist is empty, generating a default name...");
         playlist.Name = $"Imported Playlist - {DateTime.Now}";
       }
-
+      
       var creationRequest = new PlaylistCreationRequest
       {
         MediaType = playlist.MediaType,
-        UserId = _libraryManager.GetInternalId(playlist.UserId),
+        UserId = playlist.UserId.GetValueOrDefault(),
         Name = playlist.Name,
         ItemIdList = playlist.PlaylistItems.Where(item => item.Found && item.InternalId.HasValue)
-                             .Select(item => _libraryManager.GetInternalId(item.InternalId.Value))
+                             .Select(item => item.InternalId.Value)
                              .ToArray()
       };
       _logger.Info($"Converted the internal playlist into a playlist creation request with {creationRequest.ItemIdList.Length} items");

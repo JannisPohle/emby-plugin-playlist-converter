@@ -122,7 +122,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       _logger.Debug("Starting to enrich the playlist information for importing...");
       playlist.Name = request.PlaylistName;
       playlist.MediaType = request.MediaType;
-      playlist.UserId = request.UserId.ToString();
+      playlist.UserId = _libraryManager.GetInternalId(request.UserId?.ToString());
 
       foreach (var playlistItem in playlist.PlaylistItems)
       {
@@ -137,10 +137,11 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         }
 
         playlistItem.Found = true;
-        playlistItem.InternalId = matchingItem.Id;
+        playlistItem.InternalId = _libraryManager.GetInternalId(matchingItem.Id);
         _logger.Debug($"Found a matching media item for imported playlist item {playlistItem}: {matchingItem} (Id: {matchingItem.Id})");
       }
 
+      //TODO add result with count of items found, count of items not found and total items
       _logger.Info($"Found matching media items for {playlist.PlaylistItems.Count(pi => pi.Found)} items in the imported playlist out of {playlist.PlaylistItems.Count} total imported playlist items");
     }
 

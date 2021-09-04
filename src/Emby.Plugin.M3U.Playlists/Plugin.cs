@@ -73,7 +73,7 @@ namespace Emby.Plugin.M3U.Playlists
       };
       var targetFormatConverterSelector = new TargetFormatConverterSelector(availableTargetFormatConverters, _logger);
 
-      PlaylistBusinessLogic = new PlaylistBusinessLogic(targetFormatConverterSelector, _libraryManager, _logger, playlistEnricher, _playlistManager);
+      PlaylistBusinessLogic = new PlaylistBusinessLogic(targetFormatConverterSelector, _logger, playlistEnricher, _playlistManager);
     }
 
     #endregion

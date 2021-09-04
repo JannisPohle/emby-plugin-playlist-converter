@@ -38,7 +38,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(playlist);
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.Name));
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.MediaType));
-      Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.UserId));
+      Assert.IsNull(playlist.UserId);
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(1, playlist.PlaylistItems.Count);
 
@@ -60,7 +60,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(playlist);
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.Name));
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.MediaType));
-      Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.UserId));
+      Assert.IsNull(playlist.UserId);
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(5, playlist.PlaylistItems.Count);
 
@@ -87,7 +87,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(playlist);
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.Name));
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.MediaType));
-      Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.UserId));
+      Assert.IsNull(playlist.UserId);
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(5, playlist.PlaylistItems.Count);
 
@@ -115,7 +115,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(playlist);
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.Name));
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.MediaType));
-      Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.UserId));
+      Assert.IsNull(playlist.UserId);
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(9, playlist.PlaylistItems.Count);
 
@@ -147,7 +147,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsNotNull(playlist);
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.Name));
       Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.MediaType));
-      Assert.IsTrue(string.IsNullOrWhiteSpace(playlist.UserId));
+      Assert.IsNull(playlist.UserId);
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(9, playlist.PlaylistItems.Count);
 

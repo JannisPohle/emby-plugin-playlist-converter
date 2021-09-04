@@ -29,6 +29,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     {
       _libraryManagerMock = new Mock<ILibraryManager>();
       _loggerMock = new Mock<ILogger>();
+      _libraryManagerMock.Setup(mock => mock.GetInternalId(It.IsAny<Guid>())).Returns<Guid>(value => value.ToString().GetHashCode());
+      _libraryManagerMock.Setup(mock => mock.GetInternalId(It.IsAny<string>())).Returns<string>(value => value.GetHashCode());
       _playlistEnricher = new PlaylistEnricher(_loggerMock.Object, _libraryManagerMock.Object);
     }
 
@@ -85,8 +87,11 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistsAreEqual(playlist, expectedUserId: PlaylistTestHelper.USER_ID_2, expectedPlaylistItemCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1.GetHashCode(), playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Once);
+      //GetInternalId is called once for the playlist item and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -109,8 +114,11 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistsAreEqual(playlist, PlaylistTestHelper.PLAYLIST_NAME_2, expectedPlaylistItemCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_3, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_3.GetHashCode(), playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Once);
+      //GetInternalId is called once for the playlist item and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -138,8 +146,11 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_4, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_4.GetHashCode(), playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Exactly(2));
+      //GetInternalId is called once for the playlist item and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -168,6 +179,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsFalse(playlistItem.Found);
       Assert.IsNull(playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Exactly(2));
+      //GetInternalId is called never for the playlist item and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Never);
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -189,8 +203,11 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2.GetHashCode(), playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Exactly(1));
+      //GetInternalId is called once for the playlist item and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -248,17 +265,20 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 4);
       var playlistItem = playlist.PlaylistItems.First(item => item.OriginalLocation == TestData.MrSandman.OriginalLocation);
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2.GetHashCode(), playlistItem.InternalId);
       playlistItem = playlist.PlaylistItems.First(item => item.OriginalLocation == TestData.NinthWave.OriginalLocation);
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1.GetHashCode(), playlistItem.InternalId);
       playlistItem = playlist.PlaylistItems.First(item => item.OriginalLocation == TestData.TravelerInTime.OriginalLocation);
       Assert.IsTrue(playlistItem.Found);
-      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_4, playlistItem.InternalId.ToString());
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_4.GetHashCode(), playlistItem.InternalId);
       playlistItem = playlist.PlaylistItems.First(item => item.OriginalLocation == TestData.ImaginationsFromTheOtherSide.OriginalLocation);
       Assert.IsFalse(playlistItem.Found);
       Assert.IsNull(playlistItem.InternalId);
       _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Exactly(6));
+      //GetInternalId is called 3 times for the found playlist items and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Exactly(3));
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 

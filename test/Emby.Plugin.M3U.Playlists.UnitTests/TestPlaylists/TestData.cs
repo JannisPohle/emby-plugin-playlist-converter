@@ -84,9 +84,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
     /// <param name="playlistItem">The playlist item.</param>
     /// <param name="internalId">The internal identifier.</param>
     /// <returns></returns>
-    public static PlaylistItem AddInternalId(this PlaylistItem playlistItem, string internalId = null)
+    public static PlaylistItem AddInternalId(this PlaylistItem playlistItem, long? internalId = null)
     {
-      playlistItem.InternalId = new Guid(internalId ?? Guid.NewGuid().ToString());
+      playlistItem.InternalId = internalId ?? Guid.NewGuid().GetHashCode();
 
       return playlistItem;
     }

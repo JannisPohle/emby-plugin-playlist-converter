@@ -119,7 +119,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     /// <returns></returns>
     public static Playlist AddUserId(this Playlist playlist, string userId = USER_ID_1)
     {
-      playlist.UserId = userId;
+      playlist.UserId = userId?.GetHashCode();
 
       return playlist;
     }

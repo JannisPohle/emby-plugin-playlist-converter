@@ -47,7 +47,7 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <value>
     /// The internal identifier.
     /// </value>
-    public Guid? InternalId { get; set; }
+    public long? InternalId { get; set; }
 
     #endregion
 

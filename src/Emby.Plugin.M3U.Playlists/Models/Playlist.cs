@@ -39,7 +39,7 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <value>
     ///   The user identifier.
     /// </value>
-    public string UserId { get; set; }
+    public long? UserId { get; set; }
 
     #endregion
 

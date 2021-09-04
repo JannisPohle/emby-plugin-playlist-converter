@@ -141,6 +141,32 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       return result;
     }
 
+    /// <summary>
+    /// Adds the internal identifier to the playlist item.
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="internalId">The internal identifier.</param>
+    /// <returns></returns>
+    public static PlaylistItem AddInternalId(this PlaylistItem playlistItem, long? internalId = null)
+    {
+      playlistItem.InternalId = internalId ?? Guid.NewGuid().GetHashCode();
+
+      return playlistItem;
+    }
+
+    /// <summary>
+    /// Sets found to the given value on the playlist item
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="found">Found property of the playlist item is set to this value</param>
+    /// <returns></returns>
+    public static PlaylistItem SetFound(this PlaylistItem playlistItem, bool found = true)
+    {
+      playlistItem.Found = found;
+
+      return playlistItem;
+    }
+
     #endregion
   }
 }

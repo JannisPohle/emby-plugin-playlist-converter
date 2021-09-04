@@ -102,7 +102,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     {
       var importPlaylist = new ImportPlaylist
       {
-        UserId = Guid.Empty,
+        UserId = null,
         MediaType = MediaType.Audio,
         PlaylistName = PlaylistTestHelper.PLAYLIST_NAME_1,
         PlaylistFormat = SupportedPlaylistFormats.M3U.ToString(),

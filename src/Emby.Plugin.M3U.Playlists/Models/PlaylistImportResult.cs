@@ -41,6 +41,30 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// </value>
     public string PlaylistId { get; set; }
 
+    /// <summary>
+    ///   Gets or sets the total number of playlist items that were found in the imported playlist.
+    /// </summary>
+    /// <value>
+    ///   The total number of playlist items.
+    /// </value>
+    public int PlaylistItemsTotal { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the number of playlist items from the imported playlist, that were found in emby.
+    /// </summary>
+    /// <value>
+    ///   The number of playlist items found in emby.
+    /// </value>
+    public int PlaylistItemsFound { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the number of playlist items from the imported playlist, that were not found in emby.
+    /// </summary>
+    /// <value>
+    ///   The number of playlist items not found in emby.
+    /// </value>
+    public int PlaylistItemsNotFound => PlaylistItemsTotal - PlaylistItemsFound;
+
     #endregion
   }
 }

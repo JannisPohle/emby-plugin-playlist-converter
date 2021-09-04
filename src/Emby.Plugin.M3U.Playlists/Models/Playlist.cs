@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Emby.Plugin.M3U.Playlists.Models
 {
@@ -40,6 +41,22 @@ namespace Emby.Plugin.M3U.Playlists.Models
     ///   The user identifier.
     /// </value>
     public long? UserId { get; set; }
+
+    /// <summary>
+    ///   Gets the total number of playlist items in this playlist.
+    /// </summary>
+    /// <value>
+    ///   The playlist items total.
+    /// </value>
+    public int PlaylistItemsTotal => PlaylistItems.Count;
+
+    /// <summary>
+    ///   Gets all playlist items that were found in emby.
+    /// </summary>
+    /// <value>
+    ///   The playlist items that were found.
+    /// </value>
+    public IEnumerable<PlaylistItem> PlaylistItemsFound => PlaylistItems.Where(item => item.Found);
 
     #endregion
 

@@ -77,10 +77,18 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         MediaType = playlist.MediaType,
         UserId = playlist.UserId.GetValueOrDefault(),
         Name = playlist.Name,
-        ItemIdList = playlist.PlaylistItems.Where(item => item.Found && item.InternalId.HasValue)
+        ItemIdList = playlist.PlaylistItemsFound
                              .Select(item => item.InternalId.Value)
-                             .ToArray()
+                             .Distinct()
+                             .ToArray(),
       };
+
+      if (playlist.PlaylistItemsFound.Count() > creationRequest.ItemIdList.Length)
+      {
+        var duplicatedItems = playlist.PlaylistItemsFound.GroupBy(item => item.InternalId).Select(group => $"{group.Key}: ({string.Join("; ", group.Select(item => item.Title))})");
+        _logger.Warn($"Removed all entries but one for items with the same internal id in the playlist creation request. Duplicated items: {string.Join(Environment.NewLine, duplicatedItems)}");
+      }
+
       _logger.Info($"Converted the internal playlist into a playlist creation request with {creationRequest.ItemIdList.Length} items");
 
       return creationRequest;
@@ -113,7 +121,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
 
       if (validationResult.ValidationMessages.Any())
       {
-        var message = $"Validation of parameters for importing a new playlist succeded: {validationResult}";
+        var message = $"Validation of parameters for importing a new playlist succeeded: {validationResult}";
         _logger.Info(message);
       }
 
@@ -129,6 +137,8 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       result.Success = true;
       result.Name = creationResult.Name;
       result.PlaylistId = creationResult.Id;
+      result.PlaylistItemsFound = playlist.PlaylistItemsFound.Count();
+      result.PlaylistItemsTotal = playlist.PlaylistItemsTotal;
       return result;
     }
 

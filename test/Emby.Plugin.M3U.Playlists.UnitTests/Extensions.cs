@@ -79,17 +79,20 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     /// <param name="expectedUserId">The expected user identifier.</param>
     /// <param name="expectedMediaType">Expected type of the media.</param>
     /// <param name="expectedPlaylistItemCount">The expected playlist item count.</param>
+    /// <param name="expectedPlaylistItemsFoundCount">The expected number of playlist items that were found in emby</param>
     public static void PlaylistsAreEqual(this Assert assert,
                                          Playlist actualPlaylist,
                                          string expectedName = PlaylistTestHelper.PLAYLIST_NAME_1,
                                          string expectedUserId = PlaylistTestHelper.USER_ID_1,
                                          string expectedMediaType = MediaType.Audio,
-                                         int expectedPlaylistItemCount = 0)
+                                         int expectedPlaylistItemCount = 0,
+                                         int expectedPlaylistItemsFoundCount = 0)
     {
       Assert.AreEqual(expectedMediaType, actualPlaylist.MediaType);
       Assert.AreEqual(expectedName, actualPlaylist.Name);
       Assert.AreEqual(expectedUserId.GetHashCode(), actualPlaylist.UserId);
-      Assert.AreEqual(expectedPlaylistItemCount, actualPlaylist.PlaylistItems.Count);
+      Assert.AreEqual(expectedPlaylistItemCount, actualPlaylist.PlaylistItemsTotal);
+      Assert.AreEqual(expectedPlaylistItemsFoundCount, actualPlaylist.PlaylistItemsFound.Count());
     }
 
     /// <summary>

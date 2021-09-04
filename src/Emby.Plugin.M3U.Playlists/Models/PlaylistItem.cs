@@ -7,6 +7,12 @@ namespace Emby.Plugin.M3U.Playlists.Models
   /// </summary>
   public class PlaylistItem
   {
+    #region Members
+
+    private bool _found;
+
+    #endregion
+
     #region Properties
 
     /// <summary>
@@ -15,7 +21,11 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <value>
     ///   <c>true</c> if found; otherwise, <c>false</c>.
     /// </value>
-    public bool Found { get; set; }
+    public bool Found
+    {
+      get => _found && InternalId.HasValue;
+      set => _found = value;
+    }
 
     /// <summary>
     ///   Gets or sets the duration of the playlist item.
@@ -42,10 +52,10 @@ namespace Emby.Plugin.M3U.Playlists.Models
     public string OriginalLocation { get; set; }
 
     /// <summary>
-    /// Gets or sets the internal identifier.
+    ///   Gets or sets the internal identifier.
     /// </summary>
     /// <value>
-    /// The internal identifier.
+    ///   The internal identifier.
     /// </value>
     public long? InternalId { get; set; }
 

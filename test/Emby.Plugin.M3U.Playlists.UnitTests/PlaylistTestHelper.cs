@@ -125,6 +125,19 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     }
 
     /// <summary>
+    /// Adds the playlist item to the playlist and returns the playlist
+    /// </summary>
+    /// <param name="playlist">The playlist.</param>
+    /// <param name="item">The playlist item to be added</param>
+    /// <returns></returns>
+    public static Playlist AddPlaylistItem(this Playlist playlist, PlaylistItem item)
+    {
+      playlist.PlaylistItems.Add(item);
+
+      return playlist;
+    }
+
+    /// <summary>
     ///   Creates the query result with an audio item for each given identifier.
     /// </summary>
     /// <param name="itemIds">The item ids.</param>

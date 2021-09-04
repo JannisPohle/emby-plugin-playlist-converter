@@ -140,9 +140,8 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         playlistItem.InternalId = _libraryManager.GetInternalId(matchingItem.Id);
         _logger.Debug($"Found a matching media item for imported playlist item {playlistItem}: {matchingItem} (Id: {matchingItem.Id})");
       }
-
-      //TODO add result with count of items found, count of items not found and total items
-      _logger.Info($"Found matching media items for {playlist.PlaylistItems.Count(pi => pi.Found)} items in the imported playlist out of {playlist.PlaylistItems.Count} total imported playlist items");
+      
+      _logger.Info($"Found matching media items for {playlist.PlaylistItemsFound.Count()} items in the imported playlist out of {playlist.PlaylistItemsTotal} total imported playlist items");
     }
 
     #endregion

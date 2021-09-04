@@ -78,9 +78,13 @@
 
           Dashboard.showLoadingMsg();
           UploadPlaylist(fileInput.files[0]).then(function (result) {
-            console.log("Uploading finished", result);
-            //TODO show more information about imported playlist (e.g. how many entries were found)
-            SetStatusMessage("Uploading the playlist succeeded");
+            if (result.Success) {
+              SetStatusMessage("Playlist '" + result.Name + "' was created. (Found " + result.PlaylistItemsFound + " of " + result.PlaylistItemsTotal + " items, " + result.PlaylistItemsNotFound + " items were not found in Emby)");
+            }
+            else
+            {
+              SetStatusMessage("Importing the playlist failed: " + result.Message);
+            }
             Dashboard.hideLoadingMsg();
           }, () => {
             SetStatusMessage("Uploading the playlist failed");
@@ -139,13 +143,33 @@
             data: JSON.stringify(postData),
             contentType: `application/json`
           }).then(result => {
-            resolve(result);
+            getStringFromReadableStream(result.body, resolve, reject);
           }, reject);
         };
 
         // Read in the image file as a data URL.
         reader.readAsDataURL(file);
       });
+    };
+
+    function getStringFromReadableStream(readableStream, resolve, reject) {
+      const reader = readableStream.getReader();
+      const result = [];
+      readChunk(reader, result, resolve, reject);
+    }
+
+    function readChunk(reader, result, resolve, reject) {
+      reader.read().then(({ done, value }) => {
+        if (done) {
+          const uintArray = new Uint8Array(result);
+          const decoded = new TextDecoder().decode(uintArray);
+          resolve(JSON.parse(decoded));
+          return;
+        }
+
+        result.push(...value);
+        readChunk(reader, result, resolve, reject);
+      }, reject);
     };
 
   </script>

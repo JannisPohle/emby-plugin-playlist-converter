@@ -84,7 +84,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.ThisWillNeverEnd);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist(PlaylistTestHelper.USER_ID_2);
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, expectedUserId: PlaylistTestHelper.USER_ID_2, expectedPlaylistItemCount: 1);
+      Assert.That.PlaylistsAreEqual(playlist, expectedUserId: PlaylistTestHelper.USER_ID_2, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
       Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1.GetHashCode(), playlistItem.InternalId);
@@ -111,7 +111,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.Inquisition);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist(playlistName: PlaylistTestHelper.PLAYLIST_NAME_2);
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, PlaylistTestHelper.PLAYLIST_NAME_2, expectedPlaylistItemCount: 1);
+      Assert.That.PlaylistsAreEqual(playlist, PlaylistTestHelper.PLAYLIST_NAME_2, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
       Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_3.GetHashCode(), playlistItem.InternalId);
@@ -143,7 +143,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist();
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1);
+      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
       Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_4.GetHashCode(), playlistItem.InternalId);
@@ -174,7 +174,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.TimeWhatIsTime);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist(mediaType: MediaType.Video);
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, expectedMediaType: MediaType.Video, expectedPlaylistItemCount: 1);
+      Assert.That.PlaylistsAreEqual(playlist, expectedMediaType: MediaType.Video, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 0);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsFalse(playlistItem.Found);
       Assert.IsNull(playlistItem.InternalId);
@@ -200,7 +200,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.MrSandman);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist();
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1);
+      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 1);
       var playlistItem = playlist.PlaylistItems.Single();
       Assert.IsTrue(playlistItem.Found);
       Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2.GetHashCode(), playlistItem.InternalId);
@@ -262,7 +262,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide);
       var importPlaylist = PlaylistTestHelper.CreateImportPlaylist();
       _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
-      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 4);
+      Assert.That.PlaylistsAreEqual(playlist, expectedPlaylistItemCount: 4, expectedPlaylistItemsFoundCount: 3);
       var playlistItem = playlist.PlaylistItems.First(item => item.OriginalLocation == TestData.MrSandman.OriginalLocation);
       Assert.IsTrue(playlistItem.Found);
       Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_2.GetHashCode(), playlistItem.InternalId);

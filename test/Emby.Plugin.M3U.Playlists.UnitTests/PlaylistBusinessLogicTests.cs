@@ -69,6 +69,24 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     }
 
     [TestMethod]
+    public void ToCreationRequest_DuplicateIds_OK()
+    {
+      var ids = new List<long>
+      {
+        Guid.NewGuid().GetHashCode(),
+        Guid.NewGuid().GetHashCode()
+      };
+      var playlist = PlaylistTestHelper.CreateDefaultPlaylist();
+      playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide.AddInternalId(ids[0]).SetFound());
+      playlist.PlaylistItems.Add(TestData.Inquisition.AddInternalId(ids[1]).SetFound());
+      playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide.AddInternalId(ids[0]).SetFound());
+      playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide.AddInternalId(ids[0]).SetFound());
+      playlist.PlaylistItems.Add(TestData.Inquisition.AddInternalId(ids[1]).SetFound());
+      var creationRequest = _businessLogic.ToCreationRequest(playlist);
+      Assert.That.PlaylistCreateResultsAreEqual(creationRequest, expectedItemIds: ids);
+    }
+
+    [TestMethod]
     public void ToCreationRequest_ContainsNotFoundEntries_OK()
     {
       var ids = new List<long>
@@ -168,6 +186,41 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.IsTrue(result.Success, result.Message);
       Assert.AreEqual(PlaylistTestHelper.PLAYLIST_NAME_1, result.Name);
       Assert.IsFalse(string.IsNullOrWhiteSpace(result.PlaylistId));
+      Assert.AreEqual(0, result.PlaylistItemsTotal);
+      Assert.AreEqual(0, result.PlaylistItemsFound);
+      Assert.AreEqual(0, result.PlaylistItemsNotFound);
+
+      _playlistConverterMock.Verify(mock => mock.DeserializeFromFile(It.IsAny<byte[]>()), Times.Once);
+      _playlistEnricherMock.Verify(mock => mock.EnrichPlaylistInformation(It.IsAny<Models.Playlist>(), It.IsAny<ImportPlaylist>()), Times.Once);
+      _playlistManagerMock.Verify(mock => mock.CreatePlaylist(It.IsAny<PlaylistCreationRequest>()), Times.Once);
+      _formatConverterSelectorMock.Verify(mock => mock.GetConverterForPlaylistFormat(SupportedPlaylistFormats.M3U.ToString()), Times.Once);
+      _formatConverterSelectorMock.VerifyNoOtherCalls();
+    }
+
+    [TestMethod]
+    public async Task ImportPlaylist_WithItems_OK()
+    {
+      var playlistResult = PlaylistTestHelper.CreateDefaultPlaylist()
+                                             .AddPlaylistItem(TestData.ImaginationsFromTheOtherSide.SetFound().AddInternalId())
+                                             .AddPlaylistItem(TestData.NinthWave.SetFound(false))
+                                             .AddPlaylistItem(TestData.Inquisition.SetFound())
+                                             .AddPlaylistItem(TestData.MrSandman.SetFound().AddInternalId());
+      _playlistConverterMock.Setup(mock => mock.DeserializeFromFile(It.IsAny<byte[]>())).Returns(playlistResult);
+
+      _playlistManagerMock.Setup(mock => mock.CreatePlaylist(It.IsAny<PlaylistCreationRequest>()))
+                          .ReturnsAsync(new PlaylistCreationResult { Id = Guid.NewGuid().ToString(), Name = PlaylistTestHelper.PLAYLIST_NAME_2 });
+
+      var request = PlaylistTestHelper.CreateImportPlaylist(playlistData: new byte[] { 128, 255 });
+
+      var result = await _businessLogic.ImportPlaylist(request);
+
+      Assert.IsTrue(result.Success, result.Message);
+      Assert.AreEqual(PlaylistTestHelper.PLAYLIST_NAME_2, result.Name);
+      Assert.IsFalse(string.IsNullOrWhiteSpace(result.PlaylistId));
+      Assert.AreEqual(4, result.PlaylistItemsTotal);
+      Assert.AreEqual(2, result.PlaylistItemsFound);
+      //Inquisition has Found set to true, but is missing the internal id --> Should be counted as not found
+      Assert.AreEqual(2, result.PlaylistItemsNotFound);
 
       _playlistConverterMock.Verify(mock => mock.DeserializeFromFile(It.IsAny<byte[]>()), Times.Once);
       _playlistEnricherMock.Verify(mock => mock.EnrichPlaylistInformation(It.IsAny<Models.Playlist>(), It.IsAny<ImportPlaylist>()), Times.Once);

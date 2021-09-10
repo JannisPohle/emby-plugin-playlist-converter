@@ -48,9 +48,6 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// <returns></returns>
     private BaseItem FindMatchingMediaItem(PlaylistItem playlistItem, string requestMediaType)
     {
-      //TODO try with file name
-      //TODO try without media type
-      //TODO try to split the name into band and song parts
       var searchTerm = GetSearchTerm(playlistItem);
       var mediaTypes = new[] { requestMediaType };
 
@@ -86,7 +83,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// <returns></returns>
     private string GetSearchTerm(PlaylistItem playlistItem)
     {
-      var searchTerm = playlistItem.FullTrackInformation;
+      var searchTerm = playlistItem.TrackTitle ?? playlistItem.FullTrackInformation;
 
       if (string.IsNullOrWhiteSpace(searchTerm))
       {

@@ -49,12 +49,14 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     private BaseItem FindMatchingMediaItem(PlaylistItem playlistItem, string requestMediaType)
     {
       var searchTerm = GetSearchTerm(playlistItem);
+      var artists = GetArtists(playlistItem);
       var mediaTypes = new[] { requestMediaType };
-
+      
       var query = new InternalItemsQuery
       {
         Name = searchTerm,
-        MediaTypes = mediaTypes
+        MediaTypes = mediaTypes,
+        ArtistIds = artists
       };
       _logger.Debug($"Trying to find a matching media item by name {searchTerm} and media type {requestMediaType}");
       var result = _libraryManager.QueryItems(query);
@@ -68,12 +70,43 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       query = new InternalItemsQuery
       {
         SearchTerm = searchTerm,
-        MediaTypes = mediaTypes
+        MediaTypes = mediaTypes,
+        ArtistIds = artists
       };
       _logger.Debug("Found no matching item by name, trying to find a media item by using the name as a search term");
       result = _libraryManager.QueryItems(query);
 
       return result?.Items?.FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Gets the artists for the given playlist item.
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <returns></returns>
+    private long[] GetArtists(PlaylistItem playlistItem)
+    {
+      if (string.IsNullOrWhiteSpace(playlistItem.Artist))
+      {
+        _logger.Debug("Artist is not set for playlist item, query for media item will be performed without the artist filter");
+        return null;
+      }
+
+      var query = new InternalItemsQuery()
+      {
+        Name = playlistItem.Artist
+      };
+      var artists = _libraryManager.GetArtists(query);
+
+      if (artists.TotalRecordCount == 0)
+      {
+        _logger.Warn($"Found no artist for name {playlistItem.Artist}, query for media item will be performed without the artist filter");
+        return null;
+      }
+
+      _logger.Debug($"Found {artists.TotalRecordCount} artists for name {playlistItem.Artist}: {string.Join(", ", artists.Items.Select(artist => artist.Item1.Name))}");
+
+      return artists.Items.Select(artist => _libraryManager.GetInternalId(artist.Item1.Id)).ToArray();
     }
 
     /// <summary>

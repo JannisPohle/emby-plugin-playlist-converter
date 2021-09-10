@@ -3,9 +3,12 @@ using System.Linq;
 using Emby.Plugin.M3U.Playlists.Conversion;
 using Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists;
 using MediaBrowser.Controller.Entities;
+using MediaBrowser.Controller.Entities.Audio;
 using MediaBrowser.Controller.Library;
+using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Logging;
+using MediaBrowser.Model.Querying;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -31,6 +34,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _loggerMock = new Mock<ILogger>();
       _libraryManagerMock.Setup(mock => mock.GetInternalId(It.IsAny<Guid>())).Returns<Guid>(value => value.ToString().GetHashCode());
       _libraryManagerMock.Setup(mock => mock.GetInternalId(It.IsAny<string>())).Returns<string>(value => value.GetHashCode());
+
+      _libraryManagerMock.Setup(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()))
+                         .Returns(new QueryResult<Tuple<BaseItem, ItemCounts>> { Items = new Tuple<BaseItem, ItemCounts>[0], TotalRecordCount = 0 });
       _playlistEnricher = new PlaylistEnricher(_loggerMock.Object, _libraryManagerMock.Object);
     }
 
@@ -78,7 +84,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ThisWillNeverEnd.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.ThisWillNeverEnd);
@@ -92,6 +99,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called once for the playlist item and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -105,7 +114,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.Inquisition.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.Inquisition);
@@ -119,6 +129,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called once for the playlist item and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -131,13 +143,15 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide);
@@ -151,6 +165,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called once for the playlist item and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -162,13 +178,15 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TimeWhatIsTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Video)))
+                                                                          && query.MediaTypes.First() == MediaType.Video
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.TimeWhatIsTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Video)))
+                                                                          && query.MediaTypes.First() == MediaType.Video
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.TimeWhatIsTime);
@@ -182,6 +200,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called never for the playlist item and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Never);
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Once);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -193,7 +213,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == "01 Mr. Sandman"
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       //MrSandman does not contain a title
@@ -208,6 +229,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called once for the playlist item and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Once);
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is never called, because the artist is not set in the playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Never);
       _libraryManagerMock.VerifyNoOtherCalls();
     }
 
@@ -222,37 +245,43 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == "01 Mr. Sandman"
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(mrSandmanResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.NinthWave.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.NinthWave.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(ninthWaveResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TravelerInTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(travelerInTimeResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
-                                                                          && query.MediaTypes.First() == MediaType.Audio)))
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds == null)))
         .Returns(emptyResult);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       //MrSandman does not contain a title
@@ -279,9 +308,50 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       //GetInternalId is called 3 times for the found playlist items and once for the user id
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Exactly(3));
       _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item, but not for the playlist item without the artist set (Mr. Sandman)
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Exactly(3));
       _libraryManagerMock.VerifyNoOtherCalls();
     }
+    
+    [TestMethod]
+    public void EnrichPlaylistInformation_ArtistsFound_OK()
+    {
+      var artists = new QueryResult<Tuple<BaseItem, ItemCounts>>()
+      {
+        Items = new[]
+        {
+          new Tuple<BaseItem, ItemCounts>(new MusicArtist() { Id = Guid.NewGuid() }, new ItemCounts()),
+          new Tuple<BaseItem, ItemCounts>(new MusicArtist() { Id = Guid.NewGuid() }, new ItemCounts()),
+        },
+        TotalRecordCount = 2
+      };
+      _libraryManagerMock.Setup(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()))
+                         .Returns(artists);
 
+      var result = PlaylistTestHelper.CreateQueryResult(PlaylistTestHelper.BASE_ITEM_ID_1);
+
+      _libraryManagerMock
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ThisWillNeverEnd.TrackTitle
+                                                                          && query.MediaTypes.Length == 1
+                                                                          && query.MediaTypes.First() == MediaType.Audio
+                                                                          && query.ArtistIds.Length == 2)))
+        .Returns(result);
+      var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
+      playlist.PlaylistItems.Add(TestData.ThisWillNeverEnd);
+      var importPlaylist = PlaylistTestHelper.CreateImportPlaylist(PlaylistTestHelper.USER_ID_2);
+      _playlistEnricher.EnrichPlaylistInformation(playlist, importPlaylist);
+      Assert.That.PlaylistsAreEqual(playlist, expectedUserId: PlaylistTestHelper.USER_ID_2, expectedPlaylistItemCount: 1, expectedPlaylistItemsFoundCount: 1);
+      var playlistItem = playlist.PlaylistItems.Single();
+      Assert.IsTrue(playlistItem.Found);
+      Assert.AreEqual(PlaylistTestHelper.BASE_ITEM_ID_1.GetHashCode(), playlistItem.InternalId);
+      _libraryManagerMock.Verify(mock => mock.QueryItems(It.IsAny<InternalItemsQuery>()), Times.Once);
+      //GetInternalId is called once for the playlist item, twice for the artists and once for the user id
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<Guid>()), Times.Exactly(3));
+      _libraryManagerMock.Verify(mock => mock.GetInternalId(It.IsAny<string>()), Times.Once);
+      //GetArtists is called once for every playlist item
+      _libraryManagerMock.Verify(mock => mock.GetArtists(It.IsAny<InternalItemsQuery>()), Times.Once);
+      _libraryManagerMock.VerifyNoOtherCalls();
+    }
     #endregion
   }
 }

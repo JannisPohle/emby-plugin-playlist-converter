@@ -156,9 +156,10 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       Assert.That.PlaylistItemsAreEqual(TestData.PreciousJerusalem, playlist.PlaylistItems[2]);
       Assert.That.PlaylistItemsAreEqual(TestData.NinthWave, playlist.PlaylistItems[3], PlaylistItemComparisonType.OriginalLocation);
       Assert.That.PlaylistItemsAreEqual(TestData.ThisWillNeverEnd, playlist.PlaylistItems[4], PlaylistItemComparisonType.OriginalLocation);
-      Assert.That.PlaylistItemsAreEqual(TestData.TimeWhatIsTime, playlist.PlaylistItems[5], PlaylistItemComparisonType.OriginalLocation | PlaylistItemComparisonType.Title);
+      Assert.That.PlaylistItemsAreEqual(TestData.TimeWhatIsTime, playlist.PlaylistItems[5], PlaylistItemComparisonType.OriginalLocation | PlaylistItemComparisonType.FullTrackInformation | PlaylistItemComparisonType.Artist | PlaylistItemComparisonType.TrackTitle);
       Assert.That.PlaylistItemsAreEqual(TestData.TravelerInTime, playlist.PlaylistItems[6]);
-      Assert.That.PlaylistItemsAreEqual(TestData.Majesty, playlist.PlaylistItems[7], PlaylistItemComparisonType.OriginalLocation | PlaylistItemComparisonType.Title);
+      //Track information uses a different separator, and can therefore not be parsed into Artist and TrackTitle
+      Assert.That.PlaylistItemsAreEqual(TestData.Majesty.SetFullTrackInformation("Blind Guardian _ Majesty"), playlist.PlaylistItems[7], PlaylistItemComparisonType.OriginalLocation | PlaylistItemComparisonType.FullTrackInformation);
       Assert.That.PlaylistItemsAreEqual(TestData.MrSandman, playlist.PlaylistItems[8], PlaylistItemComparisonType.OriginalLocation);
     }
 

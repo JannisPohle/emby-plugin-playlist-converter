@@ -86,7 +86,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     /// <returns></returns>
     private string GetSearchTerm(PlaylistItem playlistItem)
     {
-      var searchTerm = playlistItem.Title;
+      var searchTerm = playlistItem.FullTrackInformation;
 
       if (string.IsNullOrWhiteSpace(searchTerm))
       {

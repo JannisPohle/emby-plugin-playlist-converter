@@ -76,7 +76,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       var result = PlaylistTestHelper.CreateQueryResult(PlaylistTestHelper.BASE_ITEM_ID_1);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ThisWillNeverEnd.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ThisWillNeverEnd.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(result);
@@ -103,7 +103,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
                                                         PlaylistTestHelper.BASE_ITEM_ID_2);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.Inquisition.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.Inquisition.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(result);
@@ -129,13 +129,13 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       var result = PlaylistTestHelper.CreateQueryResult(PlaylistTestHelper.BASE_ITEM_ID_4);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(emptyResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(result);
@@ -160,13 +160,13 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       var emptyResult = PlaylistTestHelper.CreateQueryResult();
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TimeWhatIsTime.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TimeWhatIsTime.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Video)))
         .Returns(emptyResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.TimeWhatIsTime.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.TimeWhatIsTime.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Video)))
         .Returns(emptyResult);
@@ -226,31 +226,31 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
         .Returns(mrSandmanResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.NinthWave.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.NinthWave.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(emptyResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.NinthWave.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.NinthWave.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(ninthWaveResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TravelerInTime.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TravelerInTime.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(travelerInTimeResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(emptyResult);
 
       _libraryManagerMock
-        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.Title
+        .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.FullTrackInformation
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio)))
         .Returns(emptyResult);

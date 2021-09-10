@@ -11,7 +11,7 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
   /// <summary>
   ///   Contains extensions for the tests
   /// </summary>
-  public static class Extensions
+  public static class CustomAssertions
   {
     #region Methods
 
@@ -42,31 +42,26 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
 
       Assert.IsNotNull(actual);
 
-      if (comparisonType.HasFlag(PlaylistItemComparisonType.OriginalLocation))
-      {
-        Assert.AreEqual(expected.OriginalLocation, actual.OriginalLocation);
-      }
-      else if (assertForNullIfPropertyNotSpecified)
-      {
-        Assert.IsNull(actual.OriginalLocation, $"Expected original location to be null, actual value: {actual.OriginalLocation}");
-      }
+      AssertPropertyByComparisonType(expected.OriginalLocation, actual.OriginalLocation, comparisonType, PlaylistItemComparisonType.OriginalLocation, assertForNullIfPropertyNotSpecified);
+      AssertPropertyByComparisonType(expected.Duration, actual.Duration, comparisonType, PlaylistItemComparisonType.Duration, assertForNullIfPropertyNotSpecified);
+      AssertPropertyByComparisonType(expected.FullTrackInformation, actual.FullTrackInformation, comparisonType, PlaylistItemComparisonType.FullTrackInformation, assertForNullIfPropertyNotSpecified);
+      AssertPropertyByComparisonType(expected.Artist, actual.Artist, comparisonType, PlaylistItemComparisonType.Artist, assertForNullIfPropertyNotSpecified);
+      AssertPropertyByComparisonType(expected.TrackTitle, actual.TrackTitle, comparisonType, PlaylistItemComparisonType.TrackTitle, assertForNullIfPropertyNotSpecified);
+    }
 
-      if (comparisonType.HasFlag(PlaylistItemComparisonType.Duration))
+    private static void AssertPropertyByComparisonType(object expected,
+                                                       object actual,
+                                                       PlaylistItemComparisonType comparisonType,
+                                                       PlaylistItemComparisonType flag,
+                                                       bool assertForNullIfPropertyNotSpecified)
+    {
+      if (comparisonType.HasFlag(flag))
       {
-        Assert.AreEqual(expected.Duration, actual.Duration);
+        Assert.AreEqual(expected, actual);
       }
       else if (assertForNullIfPropertyNotSpecified)
       {
-        Assert.IsNull(actual.Duration, $"Expected duration to be null, actual value: {actual.Duration}");
-      }
-
-      if (comparisonType.HasFlag(PlaylistItemComparisonType.Title))
-      {
-        Assert.AreEqual(expected.Title, actual.Title);
-      }
-      else if (assertForNullIfPropertyNotSpecified)
-      {
-        Assert.IsNull(actual.Title, $"Expected title to be null, actual value: {actual.Title}");
+        Assert.IsNull(actual, $"Expected property to be null, actual value: {actual}");
       }
     }
 

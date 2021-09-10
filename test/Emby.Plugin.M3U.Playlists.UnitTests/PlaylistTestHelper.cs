@@ -180,6 +180,19 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
       return playlistItem;
     }
 
+    /// <summary>
+    /// Sets the full track information on the playlist item
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="fullTrackInformation">Full track information of the playlist item is set to this value</param>
+    /// <returns></returns>
+    public static PlaylistItem SetFullTrackInformation(this PlaylistItem playlistItem, string fullTrackInformation)
+    {
+      playlistItem.FullTrackInformation = fullTrackInformation;
+
+      return playlistItem;
+    }
+
     #endregion
   }
 }

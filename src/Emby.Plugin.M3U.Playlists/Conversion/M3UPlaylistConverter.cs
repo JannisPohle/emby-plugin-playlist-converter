@@ -22,6 +22,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
     private const string TAG_START = "#";
     private const char TAG_SEPARATOR = ':';
     private const char TAG_INFO_SEPARATOR = ',';
+    private const char TAG_TRACK_INFO_SEPARATOR = '-';
 
     #endregion
 
@@ -159,8 +160,19 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
 
       playlistItem = new PlaylistItem
       {
-        Title = infoTags[1].Trim()
+        FullTrackInformation = infoTags[1].Trim()
       };
+
+      var trackInformation = playlistItem.FullTrackInformation.Split(new[] { TAG_TRACK_INFO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+      if (trackInformation.Length == 2)
+      {
+        playlistItem.Artist = trackInformation[0].Trim();
+        playlistItem.TrackTitle = trackInformation[1].Trim();
+      }
+      else
+      {
+        _logger.Debug("Could not parse full track information into artist and track title, split by '-' did not create 2 entries");
+      }
 
       if (!int.TryParse(infoTags[0], out var duration) || duration < 0)
       {

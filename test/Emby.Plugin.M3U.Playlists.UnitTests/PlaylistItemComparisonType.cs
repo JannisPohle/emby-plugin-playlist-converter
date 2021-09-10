@@ -10,7 +10,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
   {
     OriginalLocation = 1,
     Duration = 2,
-    Title = 4,
-    Full = OriginalLocation | Duration | Title
+    FullTrackInformation = 4,
+    Artist = 8,
+    TrackTitle = 16,
+    Full = OriginalLocation | Duration | FullTrackInformation | Artist | TrackTitle
   }
 }

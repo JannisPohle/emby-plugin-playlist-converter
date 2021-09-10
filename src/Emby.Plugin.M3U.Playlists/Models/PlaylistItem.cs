@@ -41,7 +41,23 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <value>
     ///   The title.
     /// </value>
-    public string Title { get; set; }
+    public string FullTrackInformation { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the artist.
+    /// </summary>
+    /// <value>
+    ///   The artist.
+    /// </value>
+    public string Artist { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the track title.
+    /// </summary>
+    /// <value>
+    ///   The track title.
+    /// </value>
+    public string TrackTitle { get; set; }
 
     /// <summary>
     ///   Gets or sets the location from the original playlist.
@@ -68,7 +84,7 @@ namespace Emby.Plugin.M3U.Playlists.Models
     /// <inheritdoc />
     public override string ToString()
     {
-      return $"{nameof(Title)}: {Title}; {nameof(OriginalLocation)}: {OriginalLocation}; {nameof(Duration)}: {Duration}; {nameof(Found)}: {Found}";
+      return $"{nameof(FullTrackInformation)}: {FullTrackInformation}; {nameof(OriginalLocation)}: {OriginalLocation}; {nameof(Duration)}: {Duration}; {nameof(Found)}: {Found}; {nameof(Artist)}: {Artist}; {nameof(TrackTitle)}: {TrackTitle}";
     }
 
     #endregion

@@ -13,7 +13,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(438),
         OriginalLocation = "Medien/Musik/Blind Guardian/Imaginations From the Other Side/01 Imaginations From the Other Side.flac",
-        Title = "Blind Guardian - Imaginations From the Other Side"
+        FullTrackInformation = "Blind Guardian - Imaginations From the Other Side",
+        Artist = "Blind Guardian",
+        TrackTitle = "Imaginations From the Other Side"
       };
 
     public static PlaylistItem Inquisition =>
@@ -21,7 +23,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(41),
         OriginalLocation = "Medien/Musik/Blind Guardian/Follow the Blind/01 Inquisition.flac",
-        Title = "Blind Guardian - Inquisition"
+        FullTrackInformation = "Blind Guardian - Inquisition",
+        TrackTitle = "Inquisition",
+        Artist = "Blind Guardian",
       };
 
     public static PlaylistItem ThisWillNeverEnd =>
@@ -29,7 +33,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(307),
         OriginalLocation = "Medien/Musik/Blind Guardian/A Twist in the Myth/1-01 This Will Never End.flac",
-        Title = "Blind Guardian - This Will Never End"
+        FullTrackInformation = "Blind Guardian - This Will Never End",
+        TrackTitle = "This Will Never End",
+        Artist = "Blind Guardian",
       };
 
     public static PlaylistItem TimeWhatIsTime =>
@@ -37,7 +43,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(345),
         OriginalLocation = "Medien/Musik/Blind Guardian/Somewhere Far Beyound/01 Time What Is Time.flac",
-        Title = "Blind Guardian - Time What Is Time"
+        FullTrackInformation = "Blind Guardian - Time What Is Time",
+        TrackTitle = "Time What Is Time",
+        Artist = "Blind Guardian",
       };
 
     public static PlaylistItem TravelerInTime =>
@@ -45,7 +53,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(361),
         OriginalLocation = "Medien/Musik/Blind Guardian/Tales from the Twilight World/01 Traveler in Time.flac",
-        Title = "Blind Guardian - Traveler in Time"
+        FullTrackInformation = "Blind Guardian - Traveler in Time",
+        Artist = "Blind Guardian",
+        TrackTitle = "Traveler in Time"
       };
 
     public static PlaylistItem Majesty =>
@@ -53,7 +63,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(451),
         OriginalLocation = "Medien/Musik/Blind Guardian/Battalions of Fear/01 Majesty.flac",
-        Title = "Blind Guardian - Majesty"
+        FullTrackInformation = "Blind Guardian - Majesty",
+        TrackTitle = "Majesty",
+        Artist = "Blind Guardian",
       };
 
     public static PlaylistItem MrSandman =>
@@ -67,7 +79,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(382),
         OriginalLocation = "Medien/Musik/Blind Guardian/A Night at the Opera/01 Precious Jerusalem.flac",
-        Title = "Blind Guardian - Precious Jerusalem"
+        FullTrackInformation = "Blind Guardian - Precious Jerusalem",
+        TrackTitle = "Precious Jerusalem",
+        Artist = "Blind Guardian",
       };
 
     public static PlaylistItem NinthWave =>
@@ -75,7 +89,9 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests.TestPlaylists
       {
         Duration = TimeSpan.FromSeconds(569),
         OriginalLocation = "Medien/Musik/Blind Guardian/Beyond the Red Mirror/01 The Ninth Wave.flac",
-        Title = "Blind Guardian - The Ninth Wave"
+        FullTrackInformation = "Blind Guardian - The Ninth Wave",
+        TrackTitle = "The Ninth Wave",
+        Artist = "Blind Guardian",
       };
   }
 }

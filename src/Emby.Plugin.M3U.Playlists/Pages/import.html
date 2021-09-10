@@ -55,8 +55,7 @@
     (function() {
 
       const pluginId = "E5162304-66CF-40F6-A64F-D77C43C1E7B7";
-
-      //TODO set playlist name to filename (if playlist name is not already set), when a file is selected
+      
       $('#uploadPlaylist').on('click',
         function() {
           const fileInput = $('#playlistFile')[0];
@@ -90,6 +89,18 @@
             SetStatusMessage("Uploading the playlist failed");
             Dashboard.hideLoadingMsg();
           });
+        });
+
+      $('#playlistFile').change(
+        function () {
+          const fileInput = $('#playlistFile')[0];
+          if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+            return;
+          }
+          const nameInput = $('#playlistName');
+          if (!nameInput.val()) {
+            nameInput.val(fileInput.files[0].name.split('.')[0]);
+          }
         });
 
     })();

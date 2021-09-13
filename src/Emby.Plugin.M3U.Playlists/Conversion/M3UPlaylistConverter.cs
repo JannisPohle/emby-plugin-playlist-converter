@@ -162,8 +162,8 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       {
         FullTrackInformation = infoTags[1].Trim()
       };
-
       var trackInformation = playlistItem.FullTrackInformation.Split(new[] { TAG_TRACK_INFO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
+
       if (trackInformation.Length == 2)
       {
         playlistItem.Artist = trackInformation[0].Trim();
@@ -188,6 +188,59 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
       return true;
     }
 
+    private string GetFileContent(byte[] rawFileContent)
+    {
+      var (encoding, strippedFileContent) = GetFileEncoding(rawFileContent);
+      var fileContent = encoding.GetString(strippedFileContent);
+
+      if (string.IsNullOrWhiteSpace(fileContent))
+      {
+        _logger.Warn("File does not contain any data, skip parsing the file");
+
+        throw new ArgumentException("File data is empty", nameof(rawFileContent));
+      }
+
+      return fileContent;
+    }
+
+    /// <summary>
+    /// Determines the file encoding and removes the byte order mark from the raw file content.
+    /// </summary>
+    /// <param name="rawFileContent">Content of the raw file.</param>
+    /// <returns>Returns the detected encoding and the file content without the byte order mark</returns>
+    private (Encoding Encoding, byte[] StrippedFileContent) GetFileEncoding(byte[] rawFileContent)
+    {
+      //Other encodings do not have a bom, so we can't check for that
+      var supportedEncodings = new List<Encoding> { Encoding.UTF32, Encoding.UTF8, Encoding.Unicode, Encoding.BigEndianUnicode, };
+      var encoding = supportedEncodings.FirstOrDefault(e => DoesFileStartWithBom(rawFileContent, e.GetPreamble()));
+
+      if (encoding == null)
+      {
+        _logger.Warn("Could not detect the file encoding by its byte order mark. Using UTF8 as a fallback.");
+
+        return (Encoding.UTF8, rawFileContent);
+      }
+
+      return (encoding, RemoveBomFromFileContent(encoding, rawFileContent));
+    }
+
+    private static byte[] RemoveBomFromFileContent(Encoding encoding, IEnumerable<byte> rawFileContent)
+    {
+      var bom = encoding.GetPreamble();
+
+      return rawFileContent.Skip(bom.Length).ToArray();
+    }
+
+    private static bool DoesFileStartWithBom(IReadOnlyList<byte> rawFileContent, IReadOnlyCollection<byte> bom)
+    {
+      if (rawFileContent.Count < bom.Count)
+      {
+        return false;
+      }
+
+      return !bom.Where((character, index) => character != rawFileContent[index]).Any();
+    }
+
     #endregion
 
     #region Interfaces
@@ -202,21 +255,7 @@ namespace Emby.Plugin.M3U.Playlists.Conversion
         throw new ArgumentNullException(nameof(rawFileContent), "File data is empty");
       }
 
-      //TODO find library that parses from correct encoding and removes BOM
-      var fileContent = Encoding.UTF8.GetString(rawFileContent);
-
-      if (fileContent.StartsWith(Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble())))
-      {
-        fileContent = fileContent.Remove(0, 1);
-      }
-
-      if (string.IsNullOrWhiteSpace(fileContent))
-      {
-        _logger.Warn("File does not contain any data, skip parsing the file");
-
-        throw new ArgumentException("File data is empty", nameof(rawFileContent));
-      }
-
+      var fileContent = GetFileContent(rawFileContent);
       var lines = fileContent.Split(new[] { "\n", "\r\n" }, StringSplitOptions.None);
       _logger.Debug($"Found {lines.Length} lines in the file data");
       var playlistItems = Parse(lines.Select(line => line.Trim()));

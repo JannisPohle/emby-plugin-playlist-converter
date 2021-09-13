@@ -29,6 +29,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     public void ConvertFromFile_SingleEntry_Valid_OK(string format)
     {
       var fileContent = File.ReadAllBytes($"TestPlaylists/{format}/Valid_SingleEntry.m3u");
@@ -51,6 +53,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     public void ConvertFromFile_MultipleEntries_Valid_OK(string format)
     {
       var fileContent = File.ReadAllBytes($"TestPlaylists/{format}/Valid_MultipleEntries.m3u");
@@ -78,6 +82,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     public void ConvertFromFile_MultipleEntries_Valid_WithoutAdditionalInformation_OK(string format)
     {
       var fileContent = File.ReadAllBytes($"TestPlaylists/{format}/Valid_MultipleEntries_WithoutAdditionalInfo.m3u");
@@ -106,6 +112,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     public void ConvertFromFile_MultipleEntries_Valid_MixedInformationState_OK(string format)
     {
       var fileContent = File.ReadAllBytes($"TestPlaylists/{format}/Valid_MultipleEntries_MixedInformationState.m3u");
@@ -138,6 +146,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     public void ConvertFromFile_MultipleEntries_Valid_ContainsInvalidEntries_OK(string format)
     {
       var fileContent = File.ReadAllBytes($"TestPlaylists/{format}/Valid_ContainsInvalidEntries.m3u");
@@ -169,6 +179,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     [ExpectedException(typeof(ArgumentException))]
     public void ConvertFromFile_EmptyFile_Invalid_NOK(string format)
     {
@@ -184,6 +196,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     [ExpectedException(typeof(InvalidDataException))]
     public void ConvertFromFile_MissingHeader_Invalid_NOK(string format)
     {
@@ -199,6 +213,8 @@ namespace Emby.Plugin.M3U.Playlists.UnitTests
     [TestMethod]
     [DataRow("UTF8")]
     [DataRow("UTF8-BOM")]
+    [DataRow("UTF16-BE")]
+    [DataRow("UTF16-LE")]
     [ExpectedException(typeof(InvalidDataException))]
     public void ConvertFromFile_NoEntries_Invalid_NOK(string format)
     {

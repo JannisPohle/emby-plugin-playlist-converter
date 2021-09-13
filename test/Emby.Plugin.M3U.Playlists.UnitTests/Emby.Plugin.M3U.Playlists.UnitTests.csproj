@@ -19,6 +19,54 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestPlaylists\UTF16-BE\Invalid_Empty.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Invalid_MissingHeader.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Invalid_NoEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Valid_ContainsInvalidEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Valid_MultipleEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Valid_MultipleEntries_MixedInformationState.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Valid_MultipleEntries_WithoutAdditionalInfo.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-BE\Valid_SingleEntry.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Invalid_Empty.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Invalid_MissingHeader.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Invalid_NoEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Valid_ContainsInvalidEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Valid_MultipleEntries.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Valid_MultipleEntries_MixedInformationState.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Valid_MultipleEntries_WithoutAdditionalInfo.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestPlaylists\UTF16-LE\Valid_SingleEntry.m3u">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestPlaylists\UTF8-BOM\Invalid_Empty.m3u">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

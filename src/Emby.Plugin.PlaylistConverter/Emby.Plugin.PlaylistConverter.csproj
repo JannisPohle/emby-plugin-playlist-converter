@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(TargetPath)&quot; &quot;Z:\emby\config\plugins&quot; /y" />
+    <Exec Condition="'$(EMBY_PLUGIN_PATH)'!=''" Command="xcopy &quot;$(TargetPath)&quot; &quot;$(EMBY_PLUGIN_PATH)&quot; /y" />
   </Target>
 
 </Project>

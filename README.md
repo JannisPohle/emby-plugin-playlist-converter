@@ -21,3 +21,5 @@ path/to/file/01 Title.flac
 
 ---
 See also [How to build a server plugin](https://github.com/MediaBrowser/Emby/wiki/How-to-build-a-Server-Plugin)
+
+The plugin is automatically copied to the plugin folder of an emby installation on a successful build, if the environment variable `EMBY_PLUGIN_PATH` is set to the full path of that plugin folder

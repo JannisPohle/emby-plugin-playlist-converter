@@ -85,7 +85,9 @@ namespace Emby.Plugin.PlaylistConverter.Conversion
 
       if (playlist.PlaylistItemsFound.Count() > creationRequest.ItemIdList.Length)
       {
-        var duplicatedItems = playlist.PlaylistItemsFound.GroupBy(item => item.InternalId).Select(group => $"ID {group.Key}: ({string.Join("; ", group.Select(item => item.FullTrackInformation))})");
+        var duplicatedItems = playlist.PlaylistItemsFound.GroupBy(item => item.InternalId)
+                                      .Where(group => group.Count() > 1)
+                                      .Select(group => $"ID {group.Key}: ({string.Join("; ", group.Select(item => item.FullTrackInformation))})");
         _logger.Warn($"Removed all entries but one for items with the same internal id in the playlist creation request. Duplicated items:{Environment.NewLine}{string.Join(Environment.NewLine, duplicatedItems)}");
       }
 

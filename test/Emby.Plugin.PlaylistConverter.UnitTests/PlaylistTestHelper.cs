@@ -193,6 +193,19 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
       return playlistItem;
     }
 
+    /// <summary>
+    /// Sets the track title on the playlist item
+    /// </summary>
+    /// <param name="playlistItem">The playlist item.</param>
+    /// <param name="title">The track title of the playlist item is set to this value</param>
+    /// <returns></returns>
+    public static PlaylistItem SetTrackTitle(this PlaylistItem playlistItem, string title)
+    {
+      playlistItem.TrackTitle = title;
+
+      return playlistItem;
+    }
+
     #endregion
   }
 }

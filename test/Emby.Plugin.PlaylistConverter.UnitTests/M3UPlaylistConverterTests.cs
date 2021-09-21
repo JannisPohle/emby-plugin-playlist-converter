@@ -68,10 +68,21 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
       Assert.IsNotNull(playlist.PlaylistItems);
       Assert.AreEqual(5, playlist.PlaylistItems.Count);
 
+
       Assert.That.PlaylistItemsAreEqual(TestData.ImaginationsFromTheOtherSide, playlist.PlaylistItems[0]);
-      Assert.That.PlaylistItemsAreEqual(TestData.Inquisition, playlist.PlaylistItems[1]);
+
+      //Entry in the playlist file differs from the "usual" testdata
+      var inquisition = TestData.Inquisition
+                                .SetFullTrackInformation(TestData.Inquisition.FullTrackInformation + ", additional information after an additional comma should cause no problems")
+                                .SetTrackTitle(TestData.Inquisition.TrackTitle + ", additional information after an additional comma should cause no problems");
+      Assert.That.PlaylistItemsAreEqual(inquisition, playlist.PlaylistItems[1]);
       Assert.That.PlaylistItemsAreEqual(TestData.ThisWillNeverEnd, playlist.PlaylistItems[2]);
-      Assert.That.PlaylistItemsAreEqual(TestData.TimeWhatIsTime, playlist.PlaylistItems[3]);
+
+      //Entry in the playlist file differs from the "usual" testdata
+      var timeWhatIsTime = TestData.TimeWhatIsTime
+                                   .SetFullTrackInformation(TestData.TimeWhatIsTime.FullTrackInformation + ":: Additional colons should also not cause problems")
+                                   .SetTrackTitle(TestData.TimeWhatIsTime.TrackTitle + ":: Additional colons should also not cause problems");
+      Assert.That.PlaylistItemsAreEqual(timeWhatIsTime, playlist.PlaylistItems[3]);
       Assert.That.PlaylistItemsAreEqual(TestData.TravelerInTime, playlist.PlaylistItems[4]);
     }
 

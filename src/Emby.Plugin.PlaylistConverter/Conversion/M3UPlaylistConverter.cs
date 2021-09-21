@@ -149,25 +149,25 @@ namespace Emby.Plugin.PlaylistConverter.Conversion
         return false;
       }
 
-      var infoTags = infoItems[1].Split(TAG_INFO_SEPARATOR);
+      var infoTags = JoinRest(infoItems, separator: TAG_SEPARATOR.ToString()).Split(TAG_INFO_SEPARATOR);
 
       if (infoTags.Length < 2)
       {
-        _logger.Warn($"Info tag is malformed (Does not contain two parts, split by a comma): '{infoItems[1]}'");
+        _logger.Warn($"Info tag is malformed (Does not contain two parts, split by a comma): '{JoinRest(infoItems)}'");
 
         return false;
       }
 
       playlistItem = new PlaylistItem
       {
-        FullTrackInformation = infoTags[1].Trim()
+        FullTrackInformation = JoinRest(infoTags, separator: TAG_INFO_SEPARATOR.ToString())
       };
       var trackInformation = playlistItem.FullTrackInformation.Split(new[] { TAG_TRACK_INFO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
 
-      if (trackInformation.Length == 2)
+      if (trackInformation.Length >= 2)
       {
         playlistItem.Artist = trackInformation[0].Trim();
-        playlistItem.TrackTitle = trackInformation[1].Trim();
+        playlistItem.TrackTitle = JoinRest(trackInformation, separator: TAG_TRACK_INFO_SEPARATOR.ToString());
       }
       else
       {
@@ -186,6 +186,18 @@ namespace Emby.Plugin.PlaylistConverter.Conversion
       _logger.Debug($"Created playlist item from info line: {playlistItem}");
 
       return true;
+    }
+
+    /// <summary>
+    /// Skips <paramref name="skipCount"/> items and joins the rest of the list into a string
+    /// </summary>
+    /// <param name="items">The items.</param>
+    /// <param name="skipCount">The skip count.</param>
+    /// <param name="separator">The separator to join the individual parts together</param>
+    /// <returns></returns>
+    private static string JoinRest(IEnumerable<string> items, int skipCount = 1, string separator = "")
+    {
+      return string.Join(separator, items.Skip(skipCount)).Trim();
     }
 
     private string GetFileContent(byte[] rawFileContent)

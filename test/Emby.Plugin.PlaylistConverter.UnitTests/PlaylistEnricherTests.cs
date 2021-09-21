@@ -85,7 +85,7 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ThisWillNeverEnd.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.ThisWillNeverEnd);
@@ -115,7 +115,7 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.Inquisition.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.Inquisition);
@@ -144,14 +144,14 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.ImaginationsFromTheOtherSide);
@@ -179,14 +179,14 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TimeWhatIsTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Video
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.TimeWhatIsTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Video
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       playlist.PlaylistItems.Add(TestData.TimeWhatIsTime);
@@ -214,7 +214,7 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == "01 Mr. Sandman"
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(result);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       //MrSandman does not contain a title
@@ -246,42 +246,42 @@ namespace Emby.Plugin.PlaylistConverter.UnitTests
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == "01 Mr. Sandman"
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(mrSandmanResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.NinthWave.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.NinthWave.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(ninthWaveResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.TravelerInTime.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(travelerInTimeResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.Name == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
 
       _libraryManagerMock
         .Setup(mock => mock.QueryItems(It.Is<InternalItemsQuery>(query => query.SearchTerm == TestData.ImaginationsFromTheOtherSide.TrackTitle
                                                                           && query.MediaTypes.Length == 1
                                                                           && query.MediaTypes.First() == MediaType.Audio
-                                                                          && query.ArtistIds == null)))
+                                                                          && query.ArtistIds.Length == 0)))
         .Returns(emptyResult);
       var playlist = PlaylistTestHelper.CreateEmptyPlaylist();
       //MrSandman does not contain a title

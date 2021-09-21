@@ -89,7 +89,7 @@ namespace Emby.Plugin.PlaylistConverter.Conversion
       if (string.IsNullOrWhiteSpace(playlistItem.Artist))
       {
         _logger.Debug("Artist is not set for playlist item, query for media item will be performed without the artist filter");
-        return null;
+        return Array.Empty<long>();
       }
 
       var query = new InternalItemsQuery()
@@ -101,7 +101,7 @@ namespace Emby.Plugin.PlaylistConverter.Conversion
       if (artists.TotalRecordCount == 0)
       {
         _logger.Warn($"Found no artist for name {playlistItem.Artist}, query for media item will be performed without the artist filter");
-        return null;
+        return Array.Empty<long>();
       }
 
       _logger.Debug($"Found {artists.TotalRecordCount} artists for name {playlistItem.Artist}: {string.Join(", ", artists.Items.Select(artist => artist.Item1.Name))}");
